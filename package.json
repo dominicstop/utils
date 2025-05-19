@@ -1,0 +1,68 @@
+{
+  "name": "@dominicstop/utils",
+  "version": "0.0.0",
+  "description": "Yet another event emitter written in typescript.",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/module/index.d.ts",
+  "source": "src/index",
+  "exports": {
+    "import": "./lib/module/index.js",
+    "require": "./lib/commonjs/index.js",
+    "types": "./lib/module/index.d.ts"
+  },
+  "files": [
+    "lib/**/*",
+    "src/**/*"
+  ],
+  "keywords": [
+    "emitter",
+    "event-emitter",
+    "typescript",
+    "typescript-event-emitter"
+  ],
+  "repository": "https://github.com/dominicstop/js-libs",
+  "author": "Dominic Go <dominicstop@gmail.com> (https://github.com/dominicstop)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dominicstop/ts-event-emitter/issues"
+  },
+  "homepage": "https://github.com/dominicstop/ts-event-emitter#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "test": "yarn run jest",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "release": "yarn run release-it --only-version",
+    "typescript": "yarn run tsc --noEmit --project tsconfig.json",
+    "build": "yarn run build:esm && yarn run build:cjs",
+    "build:esm": "yarn run tsc --project tsconfig.esm.json",
+    "build:cjs": "yarn run tsc --project tsconfig.cjs.json",
+    "clean": "rm -rf lib",
+    "prebuild": "yarn run clean",
+    "prepare": "yarn run build"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "⚙️ Chore: Release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    }
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.27.2",
+    "@types/jest": "^29.5.14",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "release-it": "^16.3.0",
+    "ts-jest": "^29.3.2",
+    "typescript": "^5.8.3"
+  }
+}
