@@ -39,7 +39,7 @@ describe('Rect', () => {
     });
 
     it('should return correct corner values', () => {
-      expect(rect.cornerPoints).toEqual({
+      expect(rect.minMaxDimensions).toEqual({
         minX: 10,
         minY: 20,
         maxX: 110,

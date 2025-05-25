@@ -1,12 +1,13 @@
 import { Point, PointValue } from "./Point";
 import { SizeValue } from "./Size";
 
+
 export type RectValue = {
   origin: PointValue;
   size: SizeValue;
 };
 
-export type RectCorners = {
+export type RectMinMaxDimensions = {
   minX: number;
   minY: number;
   maxX: number;
@@ -18,7 +19,7 @@ export type RectInit = (
     mode: 'originAndSize';
   }
 ) | (
-  RectCorners & {
+  RectMinMaxDimensions & {
     mode: 'corners';
   }
 );
@@ -52,7 +53,6 @@ export class Rect {
         break;
     };
   };
-
 
   // MARK: Getter + Setter
   // ---------------------
@@ -115,7 +115,31 @@ export class Rect {
     };
   };
 
-  get cornerPoints(): RectCorners {
+  get width(): number {
+    return this.size.width;
+  };
+
+  get height(): number {
+    return this.size.height;
+  };
+
+  get isNaN(): boolean {
+    return (
+         Number.isNaN(this.origin.x)
+      || Number.isNaN(this.origin.y)
+      || Number.isNaN(this.size.width)
+      || Number.isNaN(this.size.height)
+    );
+  };
+
+  get area(): number {
+    return this.width * this.height;
+  };
+
+  // MARK: Computed Properties - Points
+  // ----------------------------------
+
+  get minMaxDimensions(): RectMinMaxDimensions {
     return {
       minX: this.minX,
       minY: this.minY,
@@ -187,21 +211,6 @@ export class Rect {
     });
   };
 
-  get width(): number {
-    return this.size.width;
-  };
-
-  get height(): number {
-    return this.size.height;
-  };
-
-  get isNaN(): boolean {
-    return (
-         Number.isNaN(this.origin.x)
-      || Number.isNaN(this.origin.y)
-      || Number.isNaN(this.size.width)
-      || Number.isNaN(this.size.height)
-    );
   get cornerPointsAsArray(): Array<Point> {
     return [
       this.topLeftPoint,
