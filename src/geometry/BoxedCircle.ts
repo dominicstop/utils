@@ -81,6 +81,10 @@ export class BoxedCircle {
     });
   };
 
+  computeDistanceBewteenOtherCircle(otherCircle: BoxedCircle): number {
+    return BoxedCircle.distanceBetweenCircles(this, otherCircle);
+  };
+
   // MARK: - Init Alias
   // ------------------
 
@@ -90,5 +94,15 @@ export class BoxedCircle {
       center: args.center,
       radius: args.radius,
     });
+  };
+
+  // MARK: - Static Methods
+  // ----------------------
+
+  static distanceBetweenCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
+    const dx = circleA.centerPoint.x - circleB.centerPoint.x;
+    const dy = circleA.centerPoint.y - circleB.centerPoint.y;
+
+    return Math.sqrt(dx * dx + dy * dy);
   };
 };
