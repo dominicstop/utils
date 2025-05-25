@@ -84,25 +84,36 @@ export class BoxedHexagon {
     return this.circumRadius * 6;
   };
 
-  get boundingRect(): Rect {
-    return new Rect({
-      mode: 'originAndSize',
-      origin: this.origin,
-      size: {
-        height: this.circumRadius * 2,
-        width: this.circumRadius * 2,
-      },
+  get inRadius(): number {
+    return this.circumRadius * Math.sqrt(3) / 2;
+  };
+
+  get apothem(): number {
+    return this.inRadius;
+  };
+
+  get inCircle(): BoxedCircle {
+    const inRadius = this.inRadius;
+    
+    return new BoxedCircle({
+      mode: 'relativeToCenter',
+      center: this.boundingRect.centerPoint,
+      radius: inRadius,
     });
   };
 
   get circumCircle(): BoxedCircle {
     return new BoxedCircle({
-      mode: 'relativeToCenter',
-      center: this.boundingRect.centerPoint,
+      mode: 'relativeToOrigin',
+      origin: this.origin,
       radius: this.circumRadius,
     });
   };
 
+  get boundingRect(): Rect {
+    return this.circumCircle.enclosingRect;
+  };
+  
   get angles(): Array<Angle> {
     const angles: Array<Angle> = [];
     const minAngle = 360 / 6;
@@ -155,25 +166,6 @@ export class BoxedHexagon {
 
     return lines;
   };
-
-  get inRadius(): number {
-    return this.circumRadius * Math.sqrt(3) / 2;
-  };
-
-  get apothem(): number {
-    return this.inRadius;
-  };
-
-  get inCircle(): BoxedCircle {
-    
-    const inRadius = this.inRadius;
-    
-    return new BoxedCircle({
-      mode: 'relativeToCenter',
-      center: this.boundingRect.centerPoint,
-      radius: inRadius,
-    });
-  };
   
   // MARK: Methods
   // -------------
@@ -201,6 +193,9 @@ export class BoxedHexagon {
       circumRadius: this.circumRadius,
     });
   };
+
+  // MARK: Alias Init
+  // ----------------
 
   static recenterHexagonsRelativeToPoint(args: {
     hexagons: Array<BoxedHexagon>;
@@ -230,9 +225,6 @@ export class BoxedHexagon {
       });
     });
   };
-
-  // MARK: Alias Init
-  // ----------------
 
   static initializeFromValue(args: BoxedHexagonValue): BoxedHexagon {
     return new BoxedHexagon({
