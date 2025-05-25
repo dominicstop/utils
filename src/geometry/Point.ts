@@ -1,6 +1,7 @@
 import { InterpolationHelpers } from "../helpers";
 import { Line } from "./Line";
 import { Rect } from "./Rect";
+import { Vector } from "./Vector";
 
 export type PointValue = {
   x: number;
@@ -24,6 +25,42 @@ export class Point {
     };
   };
 
+  get asVector(): Vector {
+    return new Vector({
+      dx: this.x,
+      dy: this.y,
+    });
+  };
+
+  get magnitude(): number {
+    return this.asVector.magnitude;
+  }
+
+  get normalized(): Vector {
+    return this.asVector.normalized;
+  };
+
+  // MARK: - Methods
+  // ---------------
+
+  clone(): Point {
+    return new Point({ 
+      x: this.x, 
+      y: this.y
+    });
+  }
+
+  isEqualToOtherPoint(otherPoint: Point): boolean {
+    return (
+      this.x === otherPoint.x && 
+      this.y === otherPoint.y
+    );
+  }
+  
+  toString(): string {
+    return `Point(${this.x}, ${this.y})`;
+  }
+
   createLine(otherPoint: Point): Line {
     return new Line({ 
       startPoint: this, 
@@ -32,8 +69,7 @@ export class Point {
   };
   
   getDistance(otherPoint: Point): number {
-    const line = this.createLine(otherPoint);
-    return line.distance;
+    return Point.getDistanceBetweenTwoPoints(this, otherPoint);
   };
 
   getDelta(otherPoint: Point): Point {
@@ -47,9 +83,20 @@ export class Point {
     return Point.sumOfAllPoints(this, ...otherPoints);
   };
 
+  getMidpointBetweenOtherPoint(otherPoint: Point): Point {
+    const line = this.createLine(otherPoint);
+    return line.midPoint;
+  };
+
+  // MARK: - Static Alias
+  // --------------------
+
   static get zero(): Point {
     return new Point({ x: 0, y: 0 });
   }; 
+
+  // MARK: - Static Methods
+  // ----------------------
 
   static lerp(
     valueStart: Point,
@@ -132,5 +179,10 @@ export class Point {
     };
 
     return new Point({ x: sumX, y: sumY });
+  };
+  
+  static getDistanceBetweenTwoPoints(pointA: Point, pointB: Point): number {
+    const line = pointA.createLine(pointB);
+    return line.distance;
   };
 };
