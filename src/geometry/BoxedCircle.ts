@@ -107,6 +107,15 @@ export class BoxedCircle {
   // MARK: - Static Methods
   // ----------------------
 
+  /**
+   * Euclidean distance
+   * * Given two circles: `c1 = (x1, y1, r1)` and  `c2 = (x2, y2, r2)`
+   * 
+   * * The distance d between the centers of two circles `(c1, c2)` is computed via the 
+   *   Euclidean distance formula.
+   * 
+   * * formula: `sqrt( (x2 - x1)^2 + (y2 - y1)^2 )`
+   */
   static computeDistanceBetweenTwoCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
     const dx = circleA.centerPoint.x - circleB.centerPoint.x;
     const dy = circleA.centerPoint.y - circleB.centerPoint.y;
@@ -131,6 +140,9 @@ export class BoxedCircle {
     return distance <= radiusSum + epsilon;
   };
 
+  /**
+   * Two circles are "edge-to-edge" (touching) if: `d=r1+r2` 
+   */
   static checkIfTwoCirclesAreEdgeToEdge(
     circleA: BoxedCircle, 
     circleB: BoxedCircle,
