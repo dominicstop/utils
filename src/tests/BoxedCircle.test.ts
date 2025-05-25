@@ -48,7 +48,7 @@ describe("BoxedCircle", () => {
     expect(point.y).toBeCloseTo(0);
   });
 
-  describe("distanceBetweenCircles", () => {
+  describe("computeDistanceBetweenTwoCircles", () => {
     test('non-overlapping', () => {
       const a = new BoxedCircle({
         mode: "relativeToCenter",
@@ -62,7 +62,7 @@ describe("BoxedCircle", () => {
         radius: 5,
       });
 
-      expect(BoxedCircle.distanceBetweenCircles(a, b)).toBeCloseTo(50);
+      expect(BoxedCircle.computeDistanceBetweenTwoCircles(a, b)).toBeCloseTo(50);
     });
 
     test('same center', () => {
@@ -70,7 +70,7 @@ describe("BoxedCircle", () => {
       const a = BoxedCircle.initFromValue({ center, radius: 5 });
       const b = BoxedCircle.initFromValue({ center, radius: 15 });
 
-      expect(BoxedCircle.distanceBetweenCircles(a, b)).toBe(0);
+      expect(BoxedCircle.computeDistanceBetweenTwoCircles(a, b)).toBe(0);
     });
   });
 

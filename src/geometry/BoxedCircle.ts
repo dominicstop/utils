@@ -82,7 +82,7 @@ export class BoxedCircle {
   };
 
   computeDistanceBewteenOtherCircle(otherCircle: BoxedCircle): number {
-    return BoxedCircle.distanceBetweenCircles(this, otherCircle);
+    return BoxedCircle.computeDistanceBetweenTwoCircles(this, otherCircle);
   };
 
   isCollidingWithOtherCircle(otherCircle: BoxedCircle): boolean {
@@ -107,7 +107,7 @@ export class BoxedCircle {
   // MARK: - Static Methods
   // ----------------------
 
-  static distanceBetweenCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
+  static computeDistanceBetweenTwoCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
     const dx = circleA.centerPoint.x - circleB.centerPoint.x;
     const dy = circleA.centerPoint.y - circleB.centerPoint.y;
 
@@ -125,7 +125,7 @@ export class BoxedCircle {
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = this.distanceBetweenCircles(circleA, circleB);
+    const distance = this.computeDistanceBetweenTwoCircles(circleA, circleB);
     const radiusSum = circleA.radius + circleB.radius;
 
     return distance <= radiusSum + epsilon;
@@ -136,7 +136,7 @@ export class BoxedCircle {
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = this.distanceBetweenCircles(circleA, circleB);
+    const distance = this.computeDistanceBetweenTwoCircles(circleA, circleB);
     const expectedDistance = circleA.radius + circleB.radius;
 
     return Math.abs(distance - expectedDistance) < epsilon;
