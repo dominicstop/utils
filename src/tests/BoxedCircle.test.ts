@@ -1,4 +1,4 @@
-import { BoxedCircle } from "../geometry";
+import { BoxedCircle, Rect } from "../geometry";
 import { Point } from "../geometry";
 import { Angle } from "../geometry";
 
@@ -153,6 +153,68 @@ describe("BoxedCircle", () => {
       });
 
       expect(BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(a, b)).toBe(false);
+    });
+  });
+
+  describe("checkIfCircleIsInsideRect", () => {
+    test("circle fully inside rectangle", () => {
+      const circle = BoxedCircle.initFromValue({
+        center: new Point({ x: 50, y: 50 }),
+        radius: 10,
+      });
+
+      const rect = new Rect({
+        mode: 'originAndSize',
+        origin: new Point({ x: 30, y: 30 }),
+        size: { width: 40, height: 40 },
+      });
+
+      expect(BoxedCircle.checkIfCircleIsInsideRect(circle, rect)).toBe(true);
+    });
+
+    test("circle touching rectangle edge", () => {
+      const circle = BoxedCircle.initFromValue({
+        center: new Point({ x: 40, y: 40 }),
+        radius: 10,
+      });
+
+      const rect = new Rect({
+        mode: 'originAndSize',
+        origin: new Point({ x: 30, y: 30 }),
+        size: { width: 20, height: 20 },
+      });
+
+      expect(BoxedCircle.checkIfCircleIsInsideRect(circle, rect)).toBe(true);
+    });
+
+    test("circle partially outside rectangle", () => {
+      const circle = BoxedCircle.initFromValue({
+        center: new Point({ x: 45, y: 45 }),
+        radius: 10,
+      });
+
+      const rect = new Rect({
+        mode: 'originAndSize',
+        origin: new Point({ x: 30, y: 30 }),
+        size: { width: 20, height: 20 },
+      });
+
+      expect(BoxedCircle.checkIfCircleIsInsideRect(circle, rect)).toBe(false);
+    });
+
+    test("circle completely outside rectangle", () => {
+      const circle = BoxedCircle.initFromValue({
+        center: new Point({ x: 100, y: 100 }),
+        radius: 10,
+      });
+      
+      const rect = new Rect({
+        mode: 'originAndSize',
+        origin: new Point({ x: 0, y: 0 }),
+        size: { width: 50, height: 50 },
+      });
+
+      expect(BoxedCircle.checkIfCircleIsInsideRect(circle, rect)).toBe(false);
     });
   });
 });

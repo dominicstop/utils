@@ -93,6 +93,10 @@ export class BoxedCircle {
     return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, otherCircle);
   };
 
+  isInsideRect(rect: Rect): boolean {
+    return BoxedCircle.checkIfCircleIsInsideRect(this, rect);
+  };
+
   // MARK: - Init Alias
   // ------------------
 
@@ -152,5 +156,34 @@ export class BoxedCircle {
     const expectedDistance = circleA.radius + circleB.radius;
 
     return Math.abs(distance - expectedDistance) < epsilon;
+  };
+
+  /**
+   * 
+   * Collision Detection (Circle-Box)
+   * 
+   * * A circle (x, y, r) is inside a box defined by minimum (xmin, ymin) 
+   *   and maximum (xmax, ymax) coordinates if:
+   * ```
+   * x - r >= xmin
+   * x + r <= xmax
+   * y - r >= ymin
+   * y + r <= ymax
+   * ```
+   */
+  static checkIfCircleIsInsideRect(
+    circle: BoxedCircle, 
+    rect: Rect,
+    epsilon: number = 1e-10
+  ): boolean {
+    const { x: centerX, y: centerY } = circle.centerPoint;
+    const r = circle.radius;
+  
+    return (
+      (centerX - r) >= (rect.minX - epsilon) &&
+      (centerX + r) <= (rect.maxX + epsilon) &&
+      (centerY - r) >= (rect.minY - epsilon) &&
+      (centerY + r) <= (rect.maxY + epsilon)
+    );
   };
 };
