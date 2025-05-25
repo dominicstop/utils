@@ -94,7 +94,7 @@ export class HexagonGrid {
     );
   
     const outerHexagonRing = centerHexagonEdges.map((edgeLine) => (
-      centerHexagon.tileAlongsideEdge({
+      centerHexagon.computeTiledHexagonAlongsideEdge({
         edgeLine, 
         extraPositionOffset: args.extraPositionOffset,
       })
@@ -142,12 +142,12 @@ export class HexagonGrid {
       /* offset:      */ startEdgeOffset
     );
 
-    const secondHexagon = firstHexagon.tileAlongsideEdge({
+    const secondHexagon = firstHexagon.computeTiledHexagonAlongsideEdge({
       edgeLine: edgeLines[0]!, 
       extraPositionOffset: args.extraPositionOffset,
     });
 
-    const thirdHexagon = firstHexagon.tileAlongsideEdge({
+    const thirdHexagon = firstHexagon.computeTiledHexagonAlongsideEdge({
       edgeLine: edgeLines[1]!, 
       extraPositionOffset: args.extraPositionOffset,
     });

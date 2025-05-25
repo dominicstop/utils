@@ -170,7 +170,7 @@ export class BoxedHexagon {
   // MARK: Methods
   // -------------
 
-  tileAlongsideEdge(args: {
+  computeTiledHexagonAlongsideEdge(args: {
     edgeLine: Line;
     extraPositionOffset?: number;
   }): BoxedHexagon {
