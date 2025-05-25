@@ -11,6 +11,8 @@ export class Vector {
   dx: number;
   dy: number;
 
+  epsilon: number = 1e-10;
+
   constructor(args: VectorValue) {
     this.dx = args.dx;
     this.dy = args.dy;
@@ -54,11 +56,14 @@ export class Vector {
   }
 
   get isZero(): boolean {
-    return this.dx === 0 && this.dy === 0;
+    return (
+      Math.abs(this.dx) < this.epsilon && 
+      Math.abs(this.dy) < this.epsilon
+    );
   }
 
   get isUnit(): boolean {
-    return this.magnitude === 1;
+    return Math.abs(this.magnitude - 1) < this.epsilon;
   }
 
   get perpendicular(): Vector {
@@ -99,13 +104,15 @@ export class Vector {
 
   isEqualToOtherVector(
     otherVector: Vector, 
-    tolerance: number = 0.0001
+    tolerance: number = this.epsilon
   ): boolean {
+
     return (
       Math.abs(this.dx - otherVector.dx) < tolerance &&
       Math.abs(this.dy - otherVector.dy) < tolerance
     );
-  };
+  }
+  
 
   addWithOtherVector(otherVector: Vector): Vector {
     return new Vector({
@@ -166,6 +173,7 @@ export class Vector {
     const dot = this.dotProductWithOtherVector(other);
     const mags = this.magnitude * other.magnitude;
     const angle = Math.acos(Math.min(Math.max(dot / mags, -1), 1));
+    
     return Angle.initFromRadians(angle);
   }
 
