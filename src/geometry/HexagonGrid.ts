@@ -103,10 +103,10 @@ export class HexagonGrid {
     const hexagons = [centerHexagon, ...outerHexagonRing];
     const allPoints: Array<Point> = hexagons.reduce(
       (acc, curr) => {
-        acc.push(...curr.cornerPoints);
+        acc.push(...curr.cornerPointsAsArray);
         return acc;
       },
-      [...centerHexagon.cornerPoints]
+      [...centerHexagon.cornerPointsAsArray]
     );
 
     const boundingBox = Point.getBoundingBoxForPoints(allPoints);
@@ -159,9 +159,9 @@ export class HexagonGrid {
     ];
 
     const allPoints: Array<Point> = [
-      ...firstHexagon.cornerPoints,
-      ...secondHexagon.cornerPoints,
-      ...thirdHexagon.cornerPoints,
+      ...firstHexagon.cornerPointsAsArray,
+      ...secondHexagon.cornerPointsAsArray,
+      ...thirdHexagon.cornerPointsAsArray,
     ];
 
     const boundingBox = Point.getBoundingBoxForPoints(allPoints);

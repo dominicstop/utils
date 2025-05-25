@@ -202,6 +202,13 @@ export class Rect {
       || Number.isNaN(this.size.width)
       || Number.isNaN(this.size.height)
     );
+  get cornerPointsAsArray(): Array<Point> {
+    return [
+      this.topLeftPoint,
+      this.topRightPoint,
+      this.bottomLeftPoint,
+      this.bottomRightPoint,
+    ];
   };
 
   // MARK: Methods

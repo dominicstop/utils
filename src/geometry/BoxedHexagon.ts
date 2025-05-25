@@ -122,7 +122,7 @@ export class BoxedHexagon {
     return angles;
   };
 
-  get cornerPoints(): Array<Point> {
+  get cornerPointsAsArray(): Array<Point> {
     const centerPoint = this.circumCircle.centerPoint;
 
     return this.angles.map((angleItem) => (
@@ -135,7 +135,7 @@ export class BoxedHexagon {
   };
 
   get edgeLines(): Array<Line> {
-    const cornerPoints = this.cornerPoints;
+    const cornerPoints = this.cornerPointsAsArray;
 
     let lines: Array<Line> = [];
     
@@ -209,7 +209,7 @@ export class BoxedHexagon {
 
     const allPoints = args.hexagons.reduce<Point[]>(
       (acc, curr) => {
-        acc.push(...curr.cornerPoints);
+        acc.push(...curr.cornerPointsAsArray);
         return acc;
       },
       []
