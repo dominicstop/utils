@@ -226,7 +226,7 @@ export class BoxedHexagon {
     });
   };
 
-  static initializeFromValue(args: BoxedHexagonValue): BoxedHexagon {
+  static initFromValue(args: BoxedHexagonValue): BoxedHexagon {
     return new BoxedHexagon({
       mode: 'relativeToCenter',
       ...args,

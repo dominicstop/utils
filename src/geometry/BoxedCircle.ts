@@ -84,7 +84,7 @@ export class BoxedCircle {
   // MARK: - Init Alias
   // ------------------
 
-  static initializeFromValue(args: BoxedCircleValue): BoxedCircle {
+  static initFromValue(args: BoxedCircleValue): BoxedCircle {
     return new BoxedCircle({
       mode: 'relativeToCenter',
       center: args.center,
