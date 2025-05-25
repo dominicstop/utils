@@ -13,6 +13,8 @@ export class Point {
   x: number;
   y: number;
 
+  epsilon: number = 1e-10;
+
   constructor(args: PointValue){
     this.x =  args.x;
     this.y =  args.y;
@@ -52,8 +54,8 @@ export class Point {
 
   isEqualToOtherPoint(otherPoint: Point): boolean {
     return (
-      this.x === otherPoint.x && 
-      this.y === otherPoint.y
+      Math.abs(this.x - otherPoint.x) < this.epsilon &&
+      Math.abs(this.y - otherPoint.y) < this.epsilon
     );
   }
   
