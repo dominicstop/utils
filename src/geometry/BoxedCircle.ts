@@ -22,6 +22,8 @@ export class BoxedCircle {
   origin: Point;
   radius: number;
 
+  epsilon: number = 1e-10;
+
   constructor(args: BoxedCircleInit){
     this.radius = args.radius;
     
@@ -86,15 +88,15 @@ export class BoxedCircle {
   };
 
   isCollidingWithOtherCircle(otherCircle: BoxedCircle): boolean {
-    return BoxedCircle.checkCollisionBetweenTwoCircles(this, otherCircle);
+    return BoxedCircle.checkCollisionBetweenTwoCircles(this, otherCircle, this.epsilon);
   };
 
   isEdgeToEdgeWithOtherCircle(otherCircle: BoxedCircle): boolean {
-    return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, otherCircle);
+    return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, otherCircle, this.epsilon);
   };
 
   isInsideRect(rect: Rect): boolean {
-    return BoxedCircle.checkIfCircleIsInsideRect(this, rect);
+    return BoxedCircle.checkIfCircleIsInsideRect(this, rect, this.epsilon);
   };
 
   // MARK: - Init Alias
