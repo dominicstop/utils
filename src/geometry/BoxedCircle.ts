@@ -81,7 +81,7 @@ export class BoxedCircle {
     });
   };
 
-  computeDistanceBewteenOtherCircle(otherCircle: BoxedCircle): number {
+  computeDistanceFromOtherCircle(otherCircle: BoxedCircle): number {
     return BoxedCircle.computeDistanceBetweenTwoCircles(this, otherCircle);
   };
 
