@@ -85,6 +85,14 @@ export class BoxedCircle {
     return BoxedCircle.distanceBetweenCircles(this, otherCircle);
   };
 
+  isCollidingWithOtherCircle(otherCircle: BoxedCircle): boolean {
+    return BoxedCircle.checkCollisionBetweenTwoCircles(this, otherCircle);
+  };
+
+  isEdgeToEdgeWithOtherCircle(otherCircle: BoxedCircle): boolean {
+    return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, otherCircle);
+  };
+
   // MARK: - Init Alias
   // ------------------
 
@@ -104,5 +112,33 @@ export class BoxedCircle {
     const dy = circleA.centerPoint.y - circleB.centerPoint.y;
 
     return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  /**
+   * Collision detection for two circles
+   * 
+   * * Two circles are overlapping if the distance between their centers is less than 
+   *   the sum of their radii:  `d < (r1 + r2)`
+   */
+  static checkCollisionBetweenTwoCircles(
+    circleA: BoxedCircle, 
+    circleB: BoxedCircle,
+    epsilon: number = 1e-10
+  ): boolean {
+    const distance = this.distanceBetweenCircles(circleA, circleB);
+    const radiusSum = circleA.radius + circleB.radius;
+
+    return distance <= radiusSum + epsilon;
+  };
+
+  static checkIfTwoCirclesAreEdgeToEdge(
+    circleA: BoxedCircle, 
+    circleB: BoxedCircle,
+    epsilon: number = 1e-10
+  ): boolean {
+    const distance = this.distanceBetweenCircles(circleA, circleB);
+    const expectedDistance = circleA.radius + circleB.radius;
+
+    return Math.abs(distance - expectedDistance) < epsilon;
   };
 };

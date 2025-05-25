@@ -73,4 +73,86 @@ describe("BoxedCircle", () => {
       expect(BoxedCircle.distanceBetweenCircles(a, b)).toBe(0);
     });
   });
+
+  describe("checkCollisionBetweenTwoCircles", () => {
+    test("overlapping circles", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 15, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(true);
+    });
+
+    test("non-overlapping circles", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 25, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(false);
+    });
+
+    test("touching edge to edge", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 20, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(true);
+    });
+  });
+
+  describe("checkIfTwoCirclesAreEdgeToEdge", () => {
+    test("touching exactly edge to edge", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 20, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(a, b)).toBe(true);
+    });
+
+    test("overlapping circles", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 15, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(a, b)).toBe(false);
+    });
+
+    test("non-touching circles", () => {
+      const a = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+      const b = BoxedCircle.initFromValue({
+        center: new Point({ x: 25, y: 0 }),
+        radius: 10,
+      });
+
+      expect(BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(a, b)).toBe(false);
+    });
+  });
 });
