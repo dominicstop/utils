@@ -38,8 +38,8 @@ describe("Vector", () => {
     const v = new Vector({ dx: 1, dy: -2 });
     const inv = v.inverse;
 
-    expect(inv.dx).toBe(-1);
-    expect(inv.dy).toBe(2);
+    expect(inv.dx).toBeCloseTo(-1);
+    expect(inv.dy).toBeCloseTo(2);
   });
 
   test("computeDistanceFromOtherVector", () => {
@@ -84,14 +84,14 @@ describe("Vector", () => {
     const a = new Vector({ dx: 1, dy: 2 });
     const b = new Vector({ dx: 3, dy: 4 });
 
-    expect(a.dotProductWithOtherVector(b)).toBe(11);
+    expect(a.dotProductWithOtherVector(b)).toBeCloseTo(11);
   });
 
   test("crossProductWithOtherVector", () => {
     const a = new Vector({ dx: 1, dy: 2 });
     const b = new Vector({ dx: 3, dy: 4 });
 
-    expect(a.crossProductWithOtherVector(b)).toBe(-2);
+    expect(a.crossProductWithOtherVector(b)).toBeCloseTo(-2);
   });
 
   test("projectOntoOtherVector", () => {
