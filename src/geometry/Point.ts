@@ -59,6 +59,20 @@ export class Point {
     );
   }
   
+  get isZero(): boolean {
+    return (
+      Math.abs(this.x) < this.epsilon && 
+      Math.abs(this.y) < this.epsilon
+    );
+  };
+
+  get isNaN(): boolean {
+    return (
+         Number.isNaN(this.x)
+      || Number.isNaN(this.y)
+    );
+  };
+  
   toString(): string {
     return `Point(${this.x}, ${this.y})`;
   }
