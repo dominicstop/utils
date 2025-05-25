@@ -233,7 +233,7 @@ export class BoxedHexagon {
     });
   };
 
-  static createPresetHexagon(args: BoxedHexagonInit & { 
+  static initFromPresetHexagon(args: BoxedHexagonInit & { 
     hexagonType: HexagonType
   }){
     // NOTE: 

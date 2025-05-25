@@ -25,7 +25,7 @@ export class HexagonGrid {
     this.hexagonType = args.hexagonType;
     this.maxRingCount = args.maxRingCount;
     
-    this.centerHexagon = BoxedHexagon.createPresetHexagon({
+    this.centerHexagon = BoxedHexagon.initFromPresetHexagon({
       mode: 'relativeToOrigin',
       origin: args.centerHexagon.origin,
       circumRadius: args.centerHexagon.circumRadius,
