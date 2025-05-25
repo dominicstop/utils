@@ -111,7 +111,7 @@ export class BoxedHexagon {
   };
 
   get boundingRect(): Rect {
-    return this.circumCircle.enclosingRect;
+    return Point.getBoundingBoxForPoints(this.cornerPointsAsArray);
   };
   
   get angles(): Array<Angle> {
