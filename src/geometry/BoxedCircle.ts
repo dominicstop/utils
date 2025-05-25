@@ -2,20 +2,21 @@ import { Angle } from "./Angle";
 import { Point } from "./Point";
 import { Rect } from "./Rect";
 
+
 export type BoxedCircleValue = {
   center: Point;
   radius: number;
 };
 
-export type BoxedCircleInit = (
-  BoxedCircleValue & {
-    mode: 'relativeToCenter';
-  }
-) | {
+export type BoxedCircleInit = {
   mode: 'relativeToOrigin';
   origin: Point;
   radius: number;
-}
+} | (
+  BoxedCircleValue & {
+    mode: 'relativeToCenter';
+  }
+);
 
 export class BoxedCircle {
   origin: Point;
@@ -23,7 +24,7 @@ export class BoxedCircle {
 
   constructor(args: BoxedCircleInit){
     this.radius = args.radius;
-
+    
     switch(args.mode) {
       case 'relativeToOrigin':
         this.origin = args.origin;
@@ -38,6 +39,13 @@ export class BoxedCircle {
           y: originY
         });
         break;
+    };
+  };
+
+  get asValue(): BoxedCircleValue {
+    return {
+      center: this.centerPoint,
+      radius: this.radius,
     };
   };
 
@@ -63,13 +71,6 @@ export class BoxedCircle {
         height: diameter,
       },
     });
-  };
-
-  get asValue(): BoxedCircleValue {
-    return {
-      center: this.centerPoint,
-      radius: this.radius,
-    };
   };
 
   pointAlongPath(angle: Angle): Point {
