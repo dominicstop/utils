@@ -143,4 +143,21 @@ export class Angle {
       angleValue: angleMidDeg,
     });
   };
+
+  // MARK: - Static Init
+  // -------------------
+
+  static initFromDegrees(degreeValue: number): Angle {
+    return new Angle({
+      angleUnit: 'degrees',
+      angleValue: degreeValue,
+    });
+  };
+
+  static initFromRadians(radianValue: number): Angle {
+    return new Angle({
+      angleUnit: 'radians',
+      angleValue: radianValue,
+    });
+  };
 };
