@@ -1,8 +1,9 @@
 import { Rect } from "./Rect";
 import { Angle, AngleValue } from "./Angle";
 import { BoxedCircle } from "./BoxedCircle";
-import { Point } from "./Point";
+import { Point, PointValue } from "./Point";
 import { Line } from "./Line";
+import { Vector, VectorValue } from "./Vector";
 
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
@@ -110,6 +111,10 @@ export class BoxedHexagon {
     });
   };
 
+  get center(): Point {
+    return this.circumCircle.centerPoint;
+  };
+
   get boundingRect(): Rect {
     return Point.getBoundingBoxForPoints(this.cornerPointsAsArray);
   };
@@ -166,9 +171,26 @@ export class BoxedHexagon {
 
     return lines;
   };
+
+  get area(): number {
+    return (3 * Math.sqrt(3) * Math.pow(this.circumRadius, 2)) / 2;
+  };
+
+  get edgeMidpoints(): Array<Point> {
+    return this.edgeLines.map(line => line.midPoint);
+  };
   
   // MARK: Methods
   // -------------
+
+  clone(): BoxedHexagon {
+    return new BoxedHexagon({
+      mode: 'relativeToOrigin',
+      origin: this.origin.clone(),
+      circumRadius: this.circumRadius,
+      startAngleOffset: this.startAngleOffset.asValue,
+    });
+  };
 
   computeTiledHexagonAlongsideEdge(args: {
     edgeLine: Line;
@@ -191,6 +213,46 @@ export class BoxedHexagon {
       mode: 'relativeToCenter',
       center: nextCenterPoint,
       circumRadius: this.circumRadius,
+    });
+  };
+
+  isPointInside(point: Point): boolean {
+    const center = this.center;
+
+    const dx = Math.abs(point.x - center.x);
+    const dy = Math.abs(point.y - center.y);
+
+    const r = this.circumRadius;
+
+    return (
+      (dx <= r && dy <= this.inRadius) && 
+      (this.inRadius * r - this.inRadius * dx - r * dy + dx * dy) >= 0
+    );
+  };
+
+  rotatedByAngle(angle: Angle): BoxedHexagon {
+    const newAngle = this.startAngleOffset.addOtherAngle(angle);
+
+    return new BoxedHexagon({
+      mode: 'relativeToOrigin',
+      origin: this.origin,
+      circumRadius: this.circumRadius,
+      startAngleOffset: newAngle.asValue,
+    });
+  };
+
+  translatedByOffset(offset: VectorValue): BoxedHexagon {
+    const [newOrigin] = Point.translatePoints({
+      points: [this.origin], 
+      dx: offset.dx,
+      dy: offset.dy
+    });
+
+    return new BoxedHexagon({
+      mode: 'relativeToOrigin',
+      origin: newOrigin,
+      circumRadius: this.circumRadius,
+      startAngleOffset: this.startAngleOffset.asValue,
     });
   };
 
