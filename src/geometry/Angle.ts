@@ -144,6 +144,10 @@ export class Angle {
     });
   };
 
+  addOtherAngle(otherAngle: Angle): Angle{
+    return Angle.addTwoAngles(this, otherAngle);
+  };
+
   // MARK: - Static Init
   // -------------------
 
@@ -158,6 +162,20 @@ export class Angle {
     return new Angle({
       angleUnit: 'radians',
       angleValue: radianValue,
+    });
+  };
+
+  static addTwoAngles(angleA: Angle, angleB: Angle): Angle {
+    if(angleA.angleUnit === angleB.angleUnit){
+      return new Angle({
+        angleUnit: angleA.angleUnit,
+        angleValue: angleA.angleRawValue + angleB.angleRawValue, 
+      });
+    };
+
+    return new Angle({
+      angleUnit: 'degrees',
+      angleValue: angleA.degrees + angleB.degrees, 
     });
   };
 };
