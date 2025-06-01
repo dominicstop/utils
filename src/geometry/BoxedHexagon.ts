@@ -4,6 +4,7 @@ import { BoxedCircle } from "./BoxedCircle";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Vector2DValue } from "./Vector2D";
+import { BoxedPolygon } from "./interfaces/BoxedPolygon";
 
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
@@ -29,7 +30,7 @@ export type BoxedHexagonInit = (
   }
 );
 
-export class BoxedHexagon {
+export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
 
   origin: Point;
   circumRadius: number;
@@ -70,7 +71,7 @@ export class BoxedHexagon {
 
   get asValue(): BoxedHexagonValue {
     return {
-      center: this.boundingRect.centerPoint,
+      center: this.boundingBox.center,
       circumRadius: this.circumRadius,
       startAngleOffset: this.startAngleOffset.asValue,
     };
@@ -98,7 +99,7 @@ export class BoxedHexagon {
 
     return new BoxedCircle({
       mode: 'relativeToCenter',
-      center: this.boundingRect.centerPoint,
+      center: this.boundingBox.center,
       radius: inRadius,
     });
   };
@@ -112,10 +113,10 @@ export class BoxedHexagon {
   };
 
   get center(): Point {
-    return this.circumCircle.centerPoint;
+    return this.circumCircle.center;
   };
 
-  get boundingRect(): Rect {
+  get boundingBox(): Rect {
     return Point.getBoundingBoxForPoints(this.cornerPointsAsArray);
   };
 
@@ -139,7 +140,7 @@ export class BoxedHexagon {
   };
 
   get cornerPointsAsArray(): Array<Point> {
-    const centerPoint = this.circumCircle.centerPoint;
+    const centerPoint = this.circumCircle.center;
 
     return this.cornerAngles.map((angleItem) => (
       angleItem.getPointAlongCircle({
@@ -197,7 +198,7 @@ export class BoxedHexagon {
     extraPositionOffset?: number;
   }): BoxedHexagon {
     const extraPositionOffset = args.extraPositionOffset ?? 0;
-    const centerPoint = this.boundingRect.centerPoint;
+    const centerPoint = this.boundingBox.center;
 
     const apothemLine = new Line({
       startPoint: centerPoint,
@@ -256,6 +257,41 @@ export class BoxedHexagon {
     });
   };
 
+  /**
+   * returns true if this hexagon is edge-to-edge with another hexagon.
+   *
+   * * in a regular hex grid, two hexagons are touching if the distance
+   *   between their centers equals exactly: `2 * sideLength` (i.e.
+   *   one full edge length apart).
+   *
+   * - This check uses the Manhattan distance approximation for performance and simplicity.
+   */
+  isEdgeToEdgeWithOther(other: this): boolean {
+    const dx = Math.abs(this.center.x - other.center.x);
+    const dy = Math.abs(this.center.y - other.center.y);
+
+    const maxDist = this.sideLength * 2;
+    return Math.abs(dx + dy - maxDist) < 1e-6;
+  }
+
+  /**
+   * returns true if this hexagon is colliding with another hexagon.
+   *
+   * * two hexagons are considered colliding if the distance between their centers
+   *   is less than the sum of their in-radius (i.e. shortest distance from center to edge).
+   *
+   * * this uses squared distance to avoid unnecessary square root computation.
+   */
+  isCollidingWithOther(other: this): boolean {
+    const dx = this.center.x - other.center.x;
+    const dy = this.center.y - other.center.y;
+
+    const distSq = dx * dx + dy * dy;
+    const minDist = this.inRadius + other.inRadius;
+
+    return distSq < minDist * minDist;
+  }
+
   // MARK: Alias Init
   // ----------------
 
@@ -274,7 +310,7 @@ export class BoxedHexagon {
 
     const boundingBox = Point.getBoundingBoxForPoints(allPoints);
 
-    const currentCenter = boundingBox.centerPoint;
+    const currentCenter = boundingBox.center;
     const pointAdj = currentCenter.getDelta(args.centerPoint);
 
     args.hexagons.forEach(hexagon => {

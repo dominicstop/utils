@@ -20,11 +20,11 @@ export class HexagonGrid {
   centerHexagon: BoxedHexagon;
   hexagonType: HexagonType;
   maxRingCount: number;
-  
+
   constructor(args: HexagonGridConfig) {
     this.hexagonType = args.hexagonType;
     this.maxRingCount = args.maxRingCount;
-    
+
     this.centerHexagon = BoxedHexagon.initFromPresetHexagon({
       mode: 'relativeToOrigin',
       origin: args.centerHexagon.origin,
@@ -41,7 +41,7 @@ export class HexagonGrid {
     const { hexagonCoords, hexagonType } = args;
     const { ringRowIndex: q, ringColumnIndex: r } = hexagonCoords;
     const R = this.centerHexagon.circumRadius;
-  
+
     let offsetX: number;
     let offsetY: number;
 
@@ -60,9 +60,9 @@ export class HexagonGrid {
         throw new Error('Invalid hexagonType');
     };
 
-    return new Point({ 
-      x: this.centerHexagon.origin.x + offsetX, 
-      y: this.centerHexagon.origin.y + offsetY 
+    return new Point({
+      x: this.centerHexagon.origin.x + offsetX,
+      y: this.centerHexagon.origin.y + offsetY
     });
   };
 
@@ -86,16 +86,16 @@ export class HexagonGrid {
       circumRadius: args.circumRadius,
       mode: 'relativeToCenter',
     });
-  
+
     const centerHexagonEdgesRaw = centerHexagon.edgeLines;
     const centerHexagonEdges = ArrayHelpers.copyArrayWithCyclicOffset(
       /* sourceArray: */ centerHexagonEdgesRaw,
       /* offset:      */ startEdgeOffset
     );
-  
+
     const outerHexagonRing = centerHexagonEdges.map((edgeLine) => (
       centerHexagon.computeTiledHexagonAlongsideEdge({
-        edgeLine, 
+        edgeLine,
         extraPositionOffset: args.extraPositionOffset,
       })
     ));
@@ -143,12 +143,12 @@ export class HexagonGrid {
     );
 
     const secondHexagon = firstHexagon.computeTiledHexagonAlongsideEdge({
-      edgeLine: edgeLines[0]!, 
+      edgeLine: edgeLines[0]!,
       extraPositionOffset: args.extraPositionOffset,
     });
 
     const thirdHexagon = firstHexagon.computeTiledHexagonAlongsideEdge({
-      edgeLine: edgeLines[1]!, 
+      edgeLine: edgeLines[1]!,
       extraPositionOffset: args.extraPositionOffset,
     });
 
@@ -192,12 +192,12 @@ export class HexagonGrid {
 
       return ({
         hexagons: [hexagon],
-        boundingBox: hexagon.boundingRect,
+        boundingBox: hexagon.boundingBox,
       });
     };
 
     if(args.hexagonCount <= 3){
-      const startEdgeOffset = args.hexagonCount == 2 ? 1 : 0; 
+      const startEdgeOffset = args.hexagonCount == 2 ? 1 : 0;
       const shouldReCenter = args.hexagonCount == 2;
 
       const hexagonsToRemoveCount = 3 - args.hexagonCount;
@@ -224,7 +224,7 @@ export class HexagonGrid {
       });
 
     } else if(args.hexagonCount <= 7){
-      const startEdgeOffset = 
+      const startEdgeOffset =
         args.hexagonCount == 5 || args.hexagonCount == 6 ? 1 : 0;
 
       const shouldReCenter = args.hexagonCount == 4;
@@ -236,7 +236,7 @@ export class HexagonGrid {
       });
 
       const hexagons = [
-        hexagonGroup.centerHexagon, 
+        hexagonGroup.centerHexagon,
         ...hexagonGroup.outerHexagonRing
       ];
 

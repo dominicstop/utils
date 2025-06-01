@@ -1,3 +1,4 @@
+import { BoxedPolygon } from "./interfaces/BoxedPolygon";
 import { Point, PointValue } from "./Point";
 import { SizeValue } from "./Size";
 
@@ -24,7 +25,7 @@ export type RectInit = (
   }
 );
 
-export class Rect {
+export class Rect implements BoxedPolygon<RectValue> {
   origin: Point;
   size: SizeValue;
 
@@ -36,17 +37,17 @@ export class Rect {
         break;
 
       case 'corners':
-        this.origin = new Point({ 
-          x: args.minX, 
-          y: args.minY  
+        this.origin = new Point({
+          x: args.minX,
+          y: args.minY
         });
 
-        this.size = { 
-          width: args.maxX - args.minX, 
+        this.size = {
+          width: args.maxX - args.minX,
           height: args.maxY - args.minY
         };
         break;
-    
+
       default:
         this.origin = Point.zero;
         this.size = { width: 0, height: 0 };
@@ -68,7 +69,7 @@ export class Rect {
   get minY(): number {
     return this.origin.y;
   };
-  
+
   set minY(value: number) {
     this.origin.y = value;
   };
@@ -76,7 +77,7 @@ export class Rect {
   get midX(): number {
     return this.origin.x + (this.size.width / 2);
   };
-  
+
   set midX(value: number) {
     this.origin.x = value - (this.width / 2);
   };
@@ -84,11 +85,11 @@ export class Rect {
   get midY(): number {
     return this.origin.y + (this.size.height / 2);
   };
-  
+
   set midY(value: number) {
     this.origin.y = value - (this.height / 2);
   };
-  
+
   get maxX(): number {
     return this.origin.x + this.size.width;
   };
@@ -100,11 +101,11 @@ export class Rect {
   get maxY(): number {
     return this.origin.y + this.size.height;
   };
-  
+
   set maxY(value: number) {
     this.origin.y = value - this.height;
-  }
-  
+  };
+
   // MARK: Computed Properties
   // -------------------------
 
@@ -113,6 +114,13 @@ export class Rect {
       origin: this.origin,
       size: this.size,
     };
+  };
+
+  get boundingBox(): Rect {
+    return new Rect({
+      mode: 'originAndSize',
+      ...this.asValue,
+    });
   };
 
   get width(): number {
@@ -148,65 +156,65 @@ export class Rect {
     };
   };
 
-  get centerPoint(): Point {
+  get center(): Point {
     return new Point({
-        x: this.midX, 
-        y: this.midY 
+        x: this.midX,
+        y: this.midY
     });
   };
 
   get topMidPoint(): Point {
     return new Point({
-      x: this.midX, 
-      y: this.minY 
+      x: this.midX,
+      y: this.minY
     });
   };
 
   get bottomMidPoint(): Point {
     return new Point({
-      x: this.midX, 
+      x: this.midX,
       y: this.maxY
     });
   };
 
   get leftMidPoint(): Point {
     return new Point({
-      x: this.minX, 
-      y: this.midY 
+      x: this.minX,
+      y: this.midY
     });
   };
 
   get rightMidPoint(): Point {
     return new Point({
-      x: this.maxX, 
-      y: this.midY 
+      x: this.maxX,
+      y: this.midY
     });
   };
 
   get topLeftPoint(): Point {
     return new Point({
-      x: this.minX, 
+      x: this.minX,
       y: this.minY
     });
   };
 
   get topRightPoint(): Point {
     return new Point({
-      x: this.maxX, 
+      x: this.maxX,
       y: this.minY
     });
   }
 
   get bottomLeftPoint(): Point {
     return new Point({
-      x: this.minX, 
+      x: this.minX,
       y: this.maxY
     });
   }
 
   get bottomRightPoint(): Point {
     return new Point({
-      x: this.maxX, 
+      x: this.maxX,
       y: this.maxY
     });
   };
@@ -223,6 +231,35 @@ export class Rect {
   // MARK: Methods
   // -------------
 
+  isPointInside(pointValue: PointValue): boolean {
+    const { x, y } = pointValue;
+    return (
+      x >= this.minX &&
+      x <= this.maxX &&
+      y >= this.minY &&
+      y <= this.maxY
+    );
+  }
+
+  isEdgeToEdgeWithOther(other: this): boolean {
+    return (
+      this.maxX === other.minX || this.minX === other.maxX ||
+      this.maxY === other.minY || this.minY === other.maxY
+    ) && (
+      this.maxY >= other.minY && this.minY <= other.maxY &&
+      this.maxX >= other.minX && this.minX <= other.maxX
+    );
+  };
+
+  isCollidingWithOther(other: this): boolean {
+    return !(
+      this.maxX <= other.minX ||
+      this.minX >= other.maxX ||
+      this.maxY <= other.minY ||
+      this.minY >= other.maxY
+    );
+  };
+
   setPointCenter(newCenterPoint: Point){
     const newX = newCenterPoint.x - (this.width / 2);
     const newY = newCenterPoint.y - (this.height / 2);
@@ -232,7 +269,7 @@ export class Rect {
   };
 
   applyScaleToNewSize(newSize: SizeValue){
-    const center = this.centerPoint;
+    const center = this.center;
 
     const newX = center.x - (newSize.width / 2);
     const newY = center.y - (newSize.height / 2);
@@ -249,9 +286,9 @@ export class Rect {
 
     const newWidth = this.width * widthScaleFactor;
     const newHeight = this.height * heightScaleFactor;
-    
+
     const newSize: SizeValue = {
-      width: newWidth, 
+      width: newWidth,
       height: newHeight
     };
 

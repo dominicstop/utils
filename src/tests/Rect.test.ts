@@ -48,7 +48,7 @@ describe('Rect', () => {
     });
 
     it('should compute center point correctly', () => {
-      const center = rect.centerPoint;
+      const center = rect.center;
       expect(center.x).toBeCloseTo(60); // 10 + 100/2
       expect(center.y).toBeCloseTo(50); // 20 + 60/2
     });
@@ -129,8 +129,8 @@ describe('Rect', () => {
       rect.midX = 100;
       rect.midY = 100;
 
-      expect(rect.centerPoint.x).toBeCloseTo(100);
-      expect(rect.centerPoint.y).toBeCloseTo(100);
+      expect(rect.center.x).toBeCloseTo(100);
+      expect(rect.center.y).toBeCloseTo(100);
 
       expect(rect.width).toBeCloseTo(rectSize.width);
       expect(rect.height).toBeCloseTo(rectSize.height);
@@ -139,7 +139,7 @@ describe('Rect', () => {
     it('should adjust bottom right corner', () => {
       rect.maxX = 150;
       rect.maxY = 90;
-      
+
       expect(rect.maxX).toBeCloseTo(150);
       expect(rect.maxY).toBeCloseTo(90);
 
@@ -197,7 +197,7 @@ describe('Rect', () => {
 
       expect(rect.width).toBeCloseTo(200);
       expect(rect.height).toBeCloseTo(100);
-      expect(rect.centerPoint).toEqual(new Point({ x: 50, y: 25 }));
+      expect(rect.center).toEqual(new Point({ x: 50, y: 25 }));
     });
   });
 
@@ -213,8 +213,8 @@ describe('Rect', () => {
 
       expect(rect.width).toBeCloseTo(200);
       expect(rect.height).toBeCloseTo(150);
-      
-      expect(rect.centerPoint).toEqual(new Point({ x: 50, y: 25 }));
+
+      expect(rect.center).toEqual(new Point({ x: 50, y: 25 }));
     });
   });
 });

@@ -44,7 +44,7 @@ describe("BoxedHexagon", () => {
       circumRadius: 10,
     });
 
-    const translated = hex.translatedByOffset({ x: 5, y: 5 });
+    const translated = hex.translatedByOffset({ dx: 5, dy: 5 });
 
     expect(translated.center.x).toBeCloseTo(5);
     expect(translated.center.y).toBeCloseTo(5);
@@ -115,8 +115,8 @@ describe("BoxedHexagon", () => {
       circumRadius: 10,
     });
 
-    const rect = hex.boundingRect;
-    // expect(rect.containsPoint(hex.center)).toBe(true);
+    const rect = hex.boundingBox;
+    expect(rect.isPointInside(hex.center)).toBe(true);
   });
 
   test("cornerPointsAsArray length", () => {
