@@ -70,14 +70,14 @@ describe("Vector", () => {
     expect(b.subtractWithOtherVector(a).asValue).toEqual({ dx: 2, dy: 2 });
   });
 
-  test("multiplyByScalar", () => {
+  test("multipliedByScalar", () => {
     const v = new Vector2D({ dx: 2, dy: 4 });
-    expect(v.multiplyByScalar(2).asValue).toEqual({ dx: 4, dy: 8 });
+    expect(v.multipliedByScalar(2).asValue).toEqual({ dx: 4, dy: 8 });
   });
 
-  test("divideByScalar", () => {
+  test("dividedByScalar", () => {
     const v = new Vector2D({ dx: 2, dy: 4 });
-    expect(v.divideByScalar(2).asValue).toEqual({ dx: 1, dy: 2 });
+    expect(v.dividedByScalar(2).asValue).toEqual({ dx: 1, dy: 2 });
   });
 
   test("dotProductWithOtherVector", () => {

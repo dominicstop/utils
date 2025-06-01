@@ -57,7 +57,7 @@ export class Vector2D implements
       return Vector2D.zero;
     };
 
-    return this.divideByScalar(magnitude);
+    return this.dividedByScalar(magnitude);
   }
 
   get isZero(): boolean {
@@ -115,6 +115,43 @@ export class Vector2D implements
     );
   }
 
+  // MARK: - Mutate Methods (Math Operations)
+  // -------------------------------------
+
+  addWithOther(other: Vector2D): void {
+    this.dx += other.dx;
+    this.dy += other.dy;
+  };
+
+  subtractFromOther(other: Vector2D): void {
+    this.dx -= other.dx;
+    this.dy -= other.dy;
+  }
+
+  multiplyByScalar(scalar: number): void {
+    this.dx *= scalar;
+    this.dy *= scalar;
+  }
+
+  divideByScalar(scalar: number): void {
+    if (Math.abs(scalar) < this.epsilon) {
+      this.dx = 0;
+      this.dy = 0;
+    } else {
+      this.dx /= scalar;
+      this.dy /= scalar;
+    }
+  }
+
+  normalizeInPlace(): void {
+    const mag = this.magnitude;
+    if (mag >= this.epsilon) {
+      this.divideByScalar(mag);
+    }
+  }
+
+  // MARK: - Methods (Math Operations)
+  // -----------------------------
 
   addWithOtherVector(otherVector: Vector2D): Vector2D {
     return new Vector2D({
@@ -130,14 +167,14 @@ export class Vector2D implements
     });
   }
 
-  multiplyByScalar(scalar: number): Vector2D {
+  multipliedByScalar(scalar: number): Vector2D {
     return new Vector2D({
       dx: this.dx * scalar,
       dy: this.dy * scalar,
     });
   }
 
-  divideByScalar(scalar: number): Vector2D {
+  dividedByScalar(scalar: number): Vector2D {
     if (scalar === 0) {
       throw new Error("Cannot divide by zero.");
     }
@@ -168,7 +205,7 @@ export class Vector2D implements
 
   projectOntoOtherVector(other: Vector2D): Vector2D {
     const scalar = this.dotProductWithOtherVector(other) / other.magnitude ** 2;
-    return other.multiplyByScalar(scalar);
+    return other.multipliedByScalar(scalar);
   }
 
   angleBetweenOtherVector(other: Vector2D): Angle {
@@ -188,13 +225,13 @@ export class Vector2D implements
     const dot = this.dotProductWithOtherVector(vectorNormalized);
 
     return vectorNormalized
-      .multiplyByScalar(2 * dot)
+      .multipliedByScalar(2 * dot)
       .subtractWithOtherVector(this);
   }
 
   limit(maxMagnitude: number): Vector2D {
     return this.magnitude > maxMagnitude
-      ? this.normalized.multiplyByScalar(maxMagnitude)
+      ? this.normalized.multipliedByScalar(maxMagnitude)
       : this.clone();
   }
 
@@ -203,6 +240,10 @@ export class Vector2D implements
 
   static get zero(): Vector2D {
     return new Vector2D({ dx: 0, dy: 0 });
+  }
+
+  static get one(): Vector2D {
+    return new Vector2D({ dx: 1, dy: 1 });
   }
 
   static get unitX(): Vector2D {
@@ -250,7 +291,7 @@ export class Vector2D implements
       Vector2D.zero
     );
 
-    return sum.divideByScalar(vectors.length);
+    return sum.dividedByScalar(vectors.length);
   }
 
   static distanceBetweenTwoVectors(
