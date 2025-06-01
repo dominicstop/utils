@@ -1,4 +1,3 @@
-import { Cloneable } from "../types/Cloneable";
 import { BoxedPolygon } from "./interfaces/BoxedPolygon";
 import { Point, PointValue } from "./Point";
 import { SizeValue } from "./Size";
@@ -26,10 +25,10 @@ export type RectInit = (
   }
 );
 
-export class Rect implements
-  BoxedPolygon<RectValue>,
-  Cloneable<Rect>
-{
+export class Rect implements BoxedPolygon<
+  Rect,
+  RectValue
+> {
   origin: Point;
   size: SizeValue;
 

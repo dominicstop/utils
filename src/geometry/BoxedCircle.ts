@@ -1,4 +1,3 @@
-import { Cloneable } from "../types/Cloneable";
 import { Angle } from "./Angle";
 import { BoxedShape } from "./interfaces/BoxedShape";
 import { Point } from "./Point";
@@ -20,10 +19,10 @@ export type BoxedCircleInit = {
   }
 );
 
-export class BoxedCircle implements
-  BoxedShape<BoxedCircleValue>,
-  Cloneable<BoxedCircle>
-{
+export class BoxedCircle implements BoxedShape<
+  BoxedCircle,
+  BoxedCircleValue
+> {
   origin: Point;
   radius: number;
 

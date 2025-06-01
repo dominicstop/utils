@@ -1,15 +1,20 @@
 import { InterpolationHelpers } from "../helpers";
 import { Cloneable } from "../types/Cloneable";
+import { ValueRepresentable } from "../types/ValueRepresentable";
 import { Line } from "./Line";
 import { Rect } from "./Rect";
 import { Vector2D } from "./Vector2D";
+
 
 export type PointValue = {
   x: number;
   y: number;
 };
 
-export class Point implements Cloneable<Point> {
+export class Point implements
+  Cloneable<Point>,
+  ValueRepresentable<PointValue>
+{
 
   x: number;
   y: number;

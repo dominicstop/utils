@@ -1,4 +1,5 @@
 import { Cloneable } from "../types/Cloneable";
+import { ValueRepresentable } from "../types/ValueRepresentable";
 import { Point } from "./Point";
 
 
@@ -7,7 +8,10 @@ export type LineValue = {
   endPoint: Point;
 };
 
-export class Line implements Cloneable<Line> {
+export class Line implements
+  Cloneable<Line>,
+  ValueRepresentable<LineValue>
+{
 
   startPoint: Point;
   endPoint: Point;

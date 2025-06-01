@@ -1,10 +1,16 @@
+import { Cloneable } from "../../types/Cloneable";
+import { ValueRepresentable } from "../../types/ValueRepresentable";
 import { Point, PointValue } from "../Point";
 import { Rect } from "../Rect";
 
 
 export interface BoxedShape<
+  Self,
   Value extends Record<string, unknown>
-> {
+> extends
+  Cloneable<Self>,
+  ValueRepresentable<Value>
+{
 
   origin: Point;
 

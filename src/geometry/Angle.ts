@@ -1,4 +1,5 @@
 import { Cloneable } from "../types/Cloneable";
+import { ValueRepresentable } from "../types/ValueRepresentable";
 import { Point } from "./Point";
 
 export type AngleUnit = 'radians' | 'degrees';
@@ -8,7 +9,10 @@ export type AngleValue = {
   angleValue: number;
 };
 
-export class Angle implements Cloneable<Angle> {
+export class Angle implements
+  Cloneable<Angle>,
+  ValueRepresentable<AngleValue>
+{
 
   angleUnit: AngleUnit;
   angleRawValue: number;

@@ -3,8 +3,9 @@ import { BoxedShape } from "./BoxedShape";
 
 
 export interface BoxedPolygon<
+  Self,
   Value extends Record<string, unknown>
-> extends BoxedShape<Value> {
+> extends BoxedShape<Self, Value> {
 
   get cornerPointsAsArray(): Array<Point>;
 

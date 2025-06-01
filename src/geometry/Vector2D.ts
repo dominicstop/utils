@@ -1,4 +1,5 @@
 import { Cloneable } from "../types/Cloneable";
+import { ValueRepresentable } from "../types/ValueRepresentable";
 import { Angle } from "./Angle";
 import { Point, PointValue } from "./Point";
 
@@ -7,7 +8,10 @@ export type Vector2DValue = {
   dy: number;
 };
 
-export class Vector2D implements Cloneable<Vector2D> {
+export class Vector2D implements
+  Cloneable<Vector2D>,
+  ValueRepresentable<Vector2DValue>
+{
 
   dx: number;
   dy: number;

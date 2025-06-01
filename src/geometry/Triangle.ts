@@ -1,4 +1,5 @@
 import { Cloneable } from "../types/Cloneable";
+import { ValueRepresentable } from "../types/ValueRepresentable";
 import { Line } from "./Line";
 import { Point, PointValue } from "./Point";
 
@@ -21,7 +22,10 @@ export type TriangleValue = {
 ///              bottom
 ///              side
 /// ```
-export class Triangle implements Cloneable<Triangle> {
+export class Triangle implements
+  Cloneable<Triangle>,
+  ValueRepresentable<TriangleValue>
+{
 
   topPoint: Point;
   leadingPoint: Point;
