@@ -1,9 +1,9 @@
 import { Rect } from "./Rect";
 import { Angle, AngleValue } from "./Angle";
 import { BoxedCircle } from "./BoxedCircle";
-import { Point, PointValue } from "./Point";
+import { Point } from "./Point";
 import { Line } from "./Line";
-import { Vector, VectorValue } from "./Vector";
+import { VectorValue } from "./Vector";
 
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
@@ -15,7 +15,7 @@ export type BoxedHexagonValue = {
 };
 
 export type BoxedHexagonInit = (
-  Pick<BoxedHexagonValue, 
+  Pick<BoxedHexagonValue,
     | 'circumRadius'
     | 'startAngleOffset'
   >
@@ -51,13 +51,13 @@ export class BoxedHexagon {
           const originX = args.center.x - args.circumRadius;
           const originY = args.center.y - args.circumRadius;
 
-          return new Point({  
+          return new Point({
             x: originX,
             y: originY,
           });
 
         case 'relativeToOrigin':
-          return new Point({  
+          return new Point({
             x: args.origin.x,
             y: args.origin.y,
           });
@@ -95,7 +95,7 @@ export class BoxedHexagon {
 
   get inCircle(): BoxedCircle {
     const inRadius = this.inRadius;
-    
+
     return new BoxedCircle({
       mode: 'relativeToCenter',
       center: this.boundingRect.centerPoint,
@@ -118,8 +118,8 @@ export class BoxedHexagon {
   get boundingRect(): Rect {
     return Point.getBoundingBoxForPoints(this.cornerPointsAsArray);
   };
-  
-  get angles(): Array<Angle> {
+
+  get cornerAngles(): Array<Angle> {
     const angles: Array<Angle> = [];
     const minAngle = 360 / 6;
 
@@ -127,8 +127,8 @@ export class BoxedHexagon {
     for(let i = 0; i < 6; i ++){
       currentAngle += minAngle;
 
-      const newAngle = new Angle({ 
-        angleUnit: 'degrees', 
+      const newAngle = new Angle({
+        angleUnit: 'degrees',
         angleValue: currentAngle
       });
 
@@ -141,7 +141,7 @@ export class BoxedHexagon {
   get cornerPointsAsArray(): Array<Point> {
     const centerPoint = this.circumCircle.centerPoint;
 
-    return this.angles.map((angleItem) => (
+    return this.cornerAngles.map((angleItem) => (
       angleItem.getPointAlongCircle({
         radius: this.circumRadius,
         centerPoint,
@@ -154,10 +154,10 @@ export class BoxedHexagon {
     const cornerPoints = this.cornerPointsAsArray;
 
     let lines: Array<Line> = [];
-    
+
     for (let index = 0; index < cornerPoints.length; index++) {
       const nextIndex = (index + 1) % cornerPoints.length;
-      
+
       const pointCurrent = cornerPoints[index];
       const pointNext = cornerPoints[nextIndex];
 
@@ -165,7 +165,7 @@ export class BoxedHexagon {
         startPoint: pointCurrent,
         endPoint: pointNext,
       });
-      
+
       lines.push(line);
     }
 
@@ -179,7 +179,7 @@ export class BoxedHexagon {
   get edgeMidpoints(): Array<Point> {
     return this.edgeLines.map(line => line.midPoint);
   };
-  
+
   // MARK: Methods
   // -------------
 
@@ -205,8 +205,8 @@ export class BoxedHexagon {
     });
 
     const apothemDistance = apothemLine.distance * 2;
-    
-    const { stopPoint: nextCenterPoint } = 
+
+    const { stopPoint: nextCenterPoint } =
       apothemLine.traverseByDistance(apothemDistance + extraPositionOffset);
 
     return new BoxedHexagon({
@@ -225,7 +225,7 @@ export class BoxedHexagon {
     const r = this.circumRadius;
 
     return (
-      (dx <= r && dy <= this.inRadius) && 
+      (dx <= r && dy <= this.inRadius) &&
       (this.inRadius * r - this.inRadius * dx - r * dy + dx * dy) >= 0
     );
   };
@@ -243,7 +243,7 @@ export class BoxedHexagon {
 
   translatedByOffset(offset: VectorValue): BoxedHexagon {
     const [newOrigin] = Point.translatePoints({
-      points: [this.origin], 
+      points: [this.origin],
       dx: offset.dx,
       dy: offset.dy
     });
@@ -295,13 +295,13 @@ export class BoxedHexagon {
     });
   };
 
-  static initFromPresetHexagon(args: BoxedHexagonInit & { 
+  static initFromPresetHexagon(args: BoxedHexagonInit & {
     hexagonType: HexagonType
   }){
-    // NOTE: 
+    // NOTE:
     // Flat Topped Hexagon: 0°, 60°, 120°, 180°, 240°, 300°... (offset of 60)
     // Pointy-topped Hexagons: 30°, 90°, 150°, 210°, 270°, 330°... (offset of 30)
-    // 
+    //
     const angleOffset = new Angle({
       angleUnit: 'degrees',
       angleValue: args.hexagonType === 'flatTopped' ? 0 : 30,
