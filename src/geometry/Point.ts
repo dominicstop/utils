@@ -1,7 +1,7 @@
 import { InterpolationHelpers } from "../helpers";
 import { Line } from "./Line";
 import { Rect } from "./Rect";
-import { Vector } from "./Vector";
+import { Vector2D } from "./Vector2D";
 
 export type PointValue = {
   x: number;
@@ -27,8 +27,8 @@ export class Point {
     };
   };
 
-  get asVector(): Vector {
-    return new Vector({
+  get asVector(): Vector2D {
+    return new Vector2D({
       dx: this.x,
       dy: this.y,
     });
@@ -38,7 +38,7 @@ export class Point {
     return this.asVector.magnitude;
   }
 
-  get normalized(): Vector {
+  get normalized(): Vector2D {
     return this.asVector.normalized;
   };
 
@@ -46,8 +46,8 @@ export class Point {
   // ---------------
 
   clone(): Point {
-    return new Point({ 
-      x: this.x, 
+    return new Point({
+      x: this.x,
       y: this.y
     });
   }
@@ -58,10 +58,10 @@ export class Point {
       Math.abs(this.y - otherPoint.y) < this.epsilon
     );
   }
-  
+
   get isZero(): boolean {
     return (
-      Math.abs(this.x) < this.epsilon && 
+      Math.abs(this.x) < this.epsilon &&
       Math.abs(this.y) < this.epsilon
     );
   };
@@ -72,18 +72,18 @@ export class Point {
       || Number.isNaN(this.y)
     );
   };
-  
+
   toString(): string {
     return `Point(${this.x}, ${this.y})`;
   }
 
   createLine(otherPoint: Point): Line {
-    return new Line({ 
-      startPoint: this, 
+    return new Line({
+      startPoint: this,
       endPoint:  otherPoint
     });
   };
-  
+
   getDistance(otherPoint: Point): number {
     return Point.getDistanceBetweenTwoPoints(this, otherPoint);
   };
@@ -109,7 +109,7 @@ export class Point {
 
   static get zero(): Point {
     return new Point({ x: 0, y: 0 });
-  }; 
+  };
 
   // MARK: - Static Methods
   // ----------------------
@@ -133,7 +133,7 @@ export class Point {
     );
 
     return new Point({
-      x: nextX, 
+      x: nextX,
       y: nextY
     });
   };
@@ -144,7 +144,7 @@ export class Point {
 
     const sortedValuesX = valuesX.sort((a, b) => a - b);
     const sortedValuesY = valuesY.sort((a, b) => a - b);
-    
+
     const minX = sortedValuesX[0] ?? 0;
     const maxX = sortedValuesX[valuesX.length - 1] ?? 0;
 
@@ -162,7 +162,7 @@ export class Point {
 
   static translatePoints(args: {
     points: Array<Point>;
-    dx: number; 
+    dx: number;
     dy: number;
   }): Array<Point> {
     const boundingBox = this.getBoundingBoxForPoints(args.points);
@@ -188,7 +188,7 @@ export class Point {
   static sumOfAllPoints(...points: Array<Point>){
     let sumX = 0;
     let sumY = 0;
-    
+
     for (const point of points) {
       sumX += point.x;
       sumY += point.y;
@@ -196,7 +196,7 @@ export class Point {
 
     return new Point({ x: sumX, y: sumY });
   };
-  
+
   static getDistanceBetweenTwoPoints(pointA: Point, pointB: Point): number {
     const line = pointA.createLine(pointB);
     return line.distance;

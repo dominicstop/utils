@@ -1,24 +1,24 @@
 import { Angle } from "./Angle";
 import { Point, PointValue } from "./Point";
 
-export type VectorValue = {
+export type Vector2DValue = {
   dx: number;
   dy: number;
 };
 
-export class Vector {
+export class Vector2D {
 
   dx: number;
   dy: number;
 
   epsilon: number = 1e-10;
 
-  constructor(args: VectorValue) {
+  constructor(args: Vector2DValue) {
     this.dx = args.dx;
     this.dy = args.dy;
   }
 
-  get asValue(): VectorValue {
+  get asValue(): Vector2DValue {
     return {
       dx: this.dx,
       dy: this.dy,
@@ -33,7 +33,7 @@ export class Vector {
   };
 
   get asPointValue(): PointValue {
-    return { 
+    return {
       x: this.dx,
       y: this.dy,
      };
@@ -46,10 +46,10 @@ export class Vector {
     return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
   }
 
-  get normalized(): Vector {
+  get normalized(): Vector2D {
     const magnitude = this.magnitude;
     if (magnitude === 0) {
-      return Vector.zero;
+      return Vector2D.zero;
     };
 
     return this.divideByScalar(magnitude);
@@ -57,7 +57,7 @@ export class Vector {
 
   get isZero(): boolean {
     return (
-      Math.abs(this.dx) < this.epsilon && 
+      Math.abs(this.dx) < this.epsilon &&
       Math.abs(this.dy) < this.epsilon
     );
   }
@@ -66,17 +66,17 @@ export class Vector {
     return Math.abs(this.magnitude - 1) < this.epsilon;
   }
 
-  get perpendicular(): Vector {
-    return new Vector({ 
-      dx: -this.dy, 
+  get perpendicular(): Vector2D {
+    return new Vector2D({
+      dx: -this.dy,
       dy: this.dx
     });
   }
 
-  get inverse(): Vector {
-    return new Vector({ 
-      dx: -this.dx, 
-      dy: -this.dy 
+  get inverse(): Vector2D {
+    return new Vector2D({
+      dx: -this.dx,
+      dy: -this.dy
     });
   }
 
@@ -91,19 +91,19 @@ export class Vector {
   // MARK: - Methods
   // ---------------
 
-  clone(): Vector {
-    return new Vector({ 
-      dx: this.dx, 
+  clone(): Vector2D {
+    return new Vector2D({
+      dx: this.dx,
       dy: this.dy
     });
   }
 
-  computeDistanceFromOtherVector(otherVector: Vector): number {
-    return Vector.distanceBetweenTwoVectors(this, otherVector);
+  computeDistanceFromOtherVector(otherVector: Vector2D): number {
+    return Vector2D.distanceBetweenTwoVectors(this, otherVector);
   }
 
   isEqualToOtherVector(
-    otherVector: Vector, 
+    otherVector: Vector2D,
     tolerance: number = this.epsilon
   ): boolean {
 
@@ -112,76 +112,76 @@ export class Vector {
       Math.abs(this.dy - otherVector.dy) < tolerance
     );
   }
-  
 
-  addWithOtherVector(otherVector: Vector): Vector {
-    return new Vector({
+
+  addWithOtherVector(otherVector: Vector2D): Vector2D {
+    return new Vector2D({
       dx: this.dx + otherVector.dx,
       dy: this.dy + otherVector.dy,
     });
   }
 
-  subtractWithOtherVector(otherVector: Vector): Vector {
-    return new Vector({
+  subtractWithOtherVector(otherVector: Vector2D): Vector2D {
+    return new Vector2D({
       dx: this.dx - otherVector.dx,
       dy: this.dy - otherVector.dy,
     });
   }
 
-  multiplyByScalar(scalar: number): Vector {
-    return new Vector({
+  multiplyByScalar(scalar: number): Vector2D {
+    return new Vector2D({
       dx: this.dx * scalar,
       dy: this.dy * scalar,
     });
   }
 
-  divideByScalar(scalar: number): Vector {
+  divideByScalar(scalar: number): Vector2D {
     if (scalar === 0) {
       throw new Error("Cannot divide by zero.");
     }
-    return new Vector({
+    return new Vector2D({
       dx: this.dx / scalar,
       dy: this.dy / scalar,
     });
   }
 
-  dotProductWithOtherVector(otherVector: Vector): number {
+  dotProductWithOtherVector(otherVector: Vector2D): number {
     return this.dx * otherVector.dx + this.dy * otherVector.dy;
   }
 
   /**
    * Rotates the vector by a given angle in radians.
    */
-  rotateByAngle(angle: Angle): Vector {
+  rotateByAngle(angle: Angle): Vector2D {
     const angleInRadians = angle.radians;
 
     const cos = Math.cos(angleInRadians);
     const sin = Math.sin(angleInRadians);
 
-    return new Vector({
+    return new Vector2D({
       dx: this.dx * cos - this.dy * sin,
       dy: this.dx * sin + this.dy * cos,
     });
   }
 
-  projectOntoOtherVector(other: Vector): Vector {
+  projectOntoOtherVector(other: Vector2D): Vector2D {
     const scalar = this.dotProductWithOtherVector(other) / other.magnitude ** 2;
     return other.multiplyByScalar(scalar);
   }
 
-  angleBetweenOtherVector(other: Vector): Angle {
+  angleBetweenOtherVector(other: Vector2D): Angle {
     const dot = this.dotProductWithOtherVector(other);
     const mags = this.magnitude * other.magnitude;
     const angle = Math.acos(Math.min(Math.max(dot / mags, -1), 1));
-    
+
     return Angle.initFromRadians(angle);
   }
 
-  crossProductWithOtherVector(other: Vector): number {
+  crossProductWithOtherVector(other: Vector2D): number {
     return this.dx * other.dy - this.dy * other.dx;
   }
 
-  reflectOverOtherVector(vector: Vector): Vector {
+  reflectOverOtherVector(vector: Vector2D): Vector2D {
     const vectorNormalized = vector.normalized;
     const dot = this.dotProductWithOtherVector(vectorNormalized);
 
@@ -190,7 +190,7 @@ export class Vector {
       .subtractWithOtherVector(this);
   }
 
-  limit(maxMagnitude: number): Vector {
+  limit(maxMagnitude: number): Vector2D {
     return this.magnitude > maxMagnitude
       ? this.normalized.multiplyByScalar(maxMagnitude)
       : this.clone();
@@ -199,39 +199,39 @@ export class Vector {
   // MARK: - Static Alias
   // --------------------
 
-  static get zero(): Vector {
-    return new Vector({ dx: 0, dy: 0 });
+  static get zero(): Vector2D {
+    return new Vector2D({ dx: 0, dy: 0 });
   }
 
-  static get unitX(): Vector {
-    return new Vector({ dx: 1, dy: 0 });
+  static get unitX(): Vector2D {
+    return new Vector2D({ dx: 1, dy: 0 });
   }
 
-  static get unitY(): Vector {
-    return new Vector({ dx: 0, dy: 1 });
+  static get unitY(): Vector2D {
+    return new Vector2D({ dx: 0, dy: 1 });
   }
 
   // MARK: - Static Init
   // -------------------
 
   static initFromAngle(
-    angle: Angle, 
+    angle: Angle,
     magnitude: number = 1
-  ): Vector {
+  ): Vector2D {
 
     const radians = angle.radians;
-    return new Vector({
+    return new Vector2D({
       dx: Math.cos(radians) * magnitude,
       dy: Math.sin(radians) * magnitude,
     });
   }
 
   static initFromPoints(
-    p1: PointValue, 
+    p1: PointValue,
     p2: PointValue
-  ): Vector {
+  ): Vector2D {
 
-    return new Vector({
+    return new Vector2D({
       dx: p2.x - p1.x,
       dy: p2.y - p1.y,
     });
@@ -240,20 +240,20 @@ export class Vector {
   // MARK: Static Methods
   // --------------------
 
-  static computeAverage(vectors: Vector[]): Vector {
-    if (vectors.length === 0) return Vector.zero;
+  static computeAverage(vectors: Vector2D[]): Vector2D {
+    if (vectors.length === 0) return Vector2D.zero;
 
     const sum = vectors.reduce(
       (acc, v) => acc.addWithOtherVector(v),
-      Vector.zero
+      Vector2D.zero
     );
 
     return sum.divideByScalar(vectors.length);
   }
 
   static distanceBetweenTwoVectors(
-    vectorA: Vector, 
-    vectorB: Vector
+    vectorA: Vector2D,
+    vectorB: Vector2D
   ): number {
     const dx = vectorA.dx - vectorB.dx;
     const dy = vectorA.dy - vectorB.dy;

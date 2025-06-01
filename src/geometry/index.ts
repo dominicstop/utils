@@ -5,7 +5,7 @@ export * from './Point';
 export * from './Rect';
 export * from './Size';
 export * from './Triangle';
-export * from './Vector';
+export * from './Vector2D';
 
 export * from './BoxedCircle';
 export * from './BoxedHexagon';

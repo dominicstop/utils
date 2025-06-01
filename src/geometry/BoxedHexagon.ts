@@ -3,7 +3,7 @@ import { Angle, AngleValue } from "./Angle";
 import { BoxedCircle } from "./BoxedCircle";
 import { Point } from "./Point";
 import { Line } from "./Line";
-import { VectorValue } from "./Vector";
+import { Vector2DValue } from "./Vector2D";
 
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
@@ -241,7 +241,7 @@ export class BoxedHexagon {
     });
   };
 
-  translatedByOffset(offset: VectorValue): BoxedHexagon {
+  translatedByOffset(offset: Vector2DValue): BoxedHexagon {
     const [newOrigin] = Point.translatePoints({
       points: [this.origin],
       dx: offset.dx,
