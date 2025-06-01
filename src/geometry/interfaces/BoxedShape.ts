@@ -22,6 +22,8 @@ export interface BoxedShape<
 
   isPointInside(pointValue: PointValue): boolean;
 
+  distanceToOther(other: this): number;
+
   isEdgeToEdgeWithOther(other: this): boolean;
 
   isCollidingWithOther(other: this): boolean;

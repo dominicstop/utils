@@ -242,6 +242,10 @@ export class Rect implements BoxedPolygon<
     });
   };
 
+  distanceToOther(other: Rect){
+    return this.center.getDistance(other.center);
+  };
+
   isPointInside(pointValue: PointValue): boolean {
     const { x, y } = pointValue;
     return (

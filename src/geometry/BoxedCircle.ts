@@ -108,8 +108,8 @@ export class BoxedCircle implements BoxedShape<
     return distSq <= radiusSq;
   };
 
-  computeDistanceFromOther(otherCircle: BoxedCircle): number {
-    return BoxedCircle.computeDistanceBetweenTwoCircles(this, otherCircle);
+  distanceToOther(other: BoxedCircle): number {
+    return this.center.getDistance(other.center);
   };
 
   isEdgeToEdgeWithOther(other: this): boolean {
@@ -135,22 +135,6 @@ export class BoxedCircle implements BoxedShape<
   // ----------------------
 
   /**
-   * Euclidean distance
-   * * Given two circles: `c1 = (x1, y1, r1)` and  `c2 = (x2, y2, r2)`
-   *
-   * * The distance d between the centers of two circles `(c1, c2)` is computed via the
-   *   Euclidean distance formula.
-   *
-   * * formula: `sqrt( (x2 - x1)^2 + (y2 - y1)^2 )`
-   */
-  static computeDistanceBetweenTwoCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
-    const dx = circleA.center.x - circleB.center.x;
-    const dy = circleA.center.y - circleB.center.y;
-
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  /**
    * Collision detection for two circles
    *
    * * Two circles are overlapping if the distance between their centers is less than
@@ -161,7 +145,7 @@ export class BoxedCircle implements BoxedShape<
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = this.computeDistanceBetweenTwoCircles(circleA, circleB);
+    const distance = circleA.distanceToOther(circleB);
     const radiusSum = circleA.radius + circleB.radius;
 
     return distance <= radiusSum + epsilon;
@@ -175,7 +159,7 @@ export class BoxedCircle implements BoxedShape<
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = this.computeDistanceBetweenTwoCircles(circleA, circleB);
+    const distance = circleA.distanceToOther(circleB);
     const expectedDistance = circleA.radius + circleB.radius;
 
     return Math.abs(distance - expectedDistance) < epsilon;
