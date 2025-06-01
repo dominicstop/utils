@@ -1,3 +1,4 @@
+import { Cloneable } from "../types/Cloneable";
 import { Angle } from "./Angle";
 import { BoxedShape } from "./interfaces/BoxedShape";
 import { Point } from "./Point";
@@ -19,7 +20,10 @@ export type BoxedCircleInit = {
   }
 );
 
-export class BoxedCircle implements BoxedShape<BoxedCircleValue> {
+export class BoxedCircle implements
+  BoxedShape<BoxedCircleValue>,
+  Cloneable<BoxedCircle>
+{
   origin: Point;
   radius: number;
 
@@ -73,6 +77,14 @@ export class BoxedCircle implements BoxedShape<BoxedCircleValue> {
         width: diameter,
         height: diameter,
       },
+    });
+  };
+
+  clone(): BoxedCircle {
+    return new BoxedCircle({
+      mode: 'relativeToOrigin',
+      origin: this.origin,
+      radius: this.radius,
     });
   };
 

@@ -1,3 +1,4 @@
+import { Cloneable } from "../types/Cloneable";
 import { Line } from "./Line";
 import { Point, PointValue } from "./Point";
 
@@ -20,7 +21,7 @@ export type TriangleValue = {
 ///              bottom
 ///              side
 /// ```
-export class Triangle {
+export class Triangle implements Cloneable<Triangle> {
 
   topPoint: Point;
   leadingPoint: Point;
@@ -45,25 +46,25 @@ export class Triangle {
 
   get leadingSide(): Line {
     return new Line({
-      startPoint: this.topPoint, 
+      startPoint: this.topPoint,
       endPoint: this.leadingPoint
     });
   };
-  
+
   get trailingSide(): Line {
     return new Line({
-      startPoint: this.topPoint, 
+      startPoint: this.topPoint,
       endPoint: this.trailingPoint
     });
   };
-  
+
   get bottomSide(): Line {
     return new Line({
-      startPoint: this.leadingPoint, 
+      startPoint: this.leadingPoint,
       endPoint: this.trailingPoint
     });
   };
-  
+
   get centerLine(): Line {
     const bottomMidPoint = this.bottomSide.midPoint;
     return new Line({
@@ -77,18 +78,18 @@ export class Triangle {
     const distanceSigned = this.topPoint.getDistance(bottomMidPoint)
     return Math.floor(distanceSigned);
   };
-  
+
   get width(): number {
     return this.bottomSide.distance;
   };
-  
+
   get centroid(): Point {
     const sumTotalOfAllPoints = Point.sumOfAllPoints(
-      this.topPoint, 
+      this.topPoint,
       this.leadingPoint,
       this.trailingPoint
     );
-      
+
     return new Point({
       x: sumTotalOfAllPoints.x / 3,
       y: sumTotalOfAllPoints.y / 3,
@@ -99,22 +100,26 @@ export class Triangle {
     const { x: x1, y: y1 } = this.topPoint;
     const { x: x2, y: y2 } = this.leadingPoint;
     const { x: x3, y: y3 } = this.trailingPoint;
-  
+
     const area = 0.5 * Math.abs(
       x1 * (y2 - y3) +
       x2 * (y3 - y1) +
       x3 * (y1 - y2)
     );
-  
+
     return area;
   };
 
   get isCollinear(): boolean {
     return isNaN(this.area) || this.area === 0;
   };
-  
+
   // MARK: - Methods
   // ---------------
+
+  clone(): Triangle {
+    return new Triangle(this.asValue);
+  };
 
   /// Resize triangle to new height, preserving slope, and topmost point
   /// (i.e. the resizing is pinned to the top).

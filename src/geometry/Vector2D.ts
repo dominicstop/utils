@@ -1,3 +1,4 @@
+import { Cloneable } from "../types/Cloneable";
 import { Angle } from "./Angle";
 import { Point, PointValue } from "./Point";
 
@@ -6,7 +7,7 @@ export type Vector2DValue = {
   dy: number;
 };
 
-export class Vector2D {
+export class Vector2D implements Cloneable<Vector2D> {
 
   dx: number;
   dy: number;
@@ -92,11 +93,8 @@ export class Vector2D {
   // ---------------
 
   clone(): Vector2D {
-    return new Vector2D({
-      dx: this.dx,
-      dy: this.dy
-    });
-  }
+    return new Vector2D(this.asValue);
+  };
 
   computeDistanceFromOtherVector(otherVector: Vector2D): number {
     return Vector2D.distanceBetweenTwoVectors(this, otherVector);

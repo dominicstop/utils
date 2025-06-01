@@ -1,3 +1,4 @@
+import { Cloneable } from "../types/Cloneable";
 import { BoxedPolygon } from "./interfaces/BoxedPolygon";
 import { Point, PointValue } from "./Point";
 import { SizeValue } from "./Size";
@@ -25,7 +26,10 @@ export type RectInit = (
   }
 );
 
-export class Rect implements BoxedPolygon<RectValue> {
+export class Rect implements
+  BoxedPolygon<RectValue>,
+  Cloneable<Rect>
+{
   origin: Point;
   size: SizeValue;
 
@@ -230,6 +234,14 @@ export class Rect implements BoxedPolygon<RectValue> {
 
   // MARK: Methods
   // -------------
+
+  clone(): Rect {
+    return new Rect({
+      mode: 'originAndSize',
+      origin: this.origin,
+      size: this.size,
+    });
+  };
 
   isPointInside(pointValue: PointValue): boolean {
     const { x, y } = pointValue;

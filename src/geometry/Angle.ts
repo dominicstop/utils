@@ -1,3 +1,4 @@
+import { Cloneable } from "../types/Cloneable";
 import { Point } from "./Point";
 
 export type AngleUnit = 'radians' | 'degrees';
@@ -7,7 +8,7 @@ export type AngleValue = {
   angleValue: number;
 };
 
-export class Angle {
+export class Angle implements Cloneable<Angle> {
 
   angleUnit: AngleUnit;
   angleRawValue: number;
@@ -61,14 +62,20 @@ export class Angle {
 
     const normalizedDegreesAdj = normalizedDegrees + adj;
 
-    return new Angle({ 
-      angleUnit: 'degrees', 
+    return new Angle({
+      angleUnit: 'degrees',
       angleValue:  normalizedDegreesAdj,
     });
   };
 
   get isZero(): boolean {
     return this.angleRawValue == 0;
+  };
+
+  clone(): Angle {
+    return new Angle({
+      ...this.asValue,
+    });
   };
 
   getPointAlongCircle(args: {
@@ -96,19 +103,19 @@ export class Angle {
 
     const angleLeading = this.normalized.degrees;
     const angleTrailing = args.otherAngle.normalized.degrees;
-    
+
     const delta = angleLeading - angleTrailing;
-    
+
     const needsAdj = isClockwise
       ? delta > 0
       : delta < 0;
-    
+
     // amount to shift ccw direction
     const adj: number = (() => {
       if(needsAdj){
         return 0;
       };
-      
+
       return Math.abs(delta) / 2;
     })();
 
@@ -116,28 +123,28 @@ export class Angle {
       if (adj == 0){
         return (angleLeading + angleTrailing) / 2;
       };
-      
+
       // adjust by shifting counter clockwise
-      const angleLeadingShifted = new Angle({ 
-        angleUnit: 'degrees',  
+      const angleLeadingShifted = new Angle({
+        angleUnit: 'degrees',
         angleValue: angleLeading + adj,
       });
 
-      const angleTrailingShifted = new Angle({ 
-        angleUnit: 'degrees',  
+      const angleTrailingShifted = new Angle({
+        angleUnit: 'degrees',
         angleValue: angleTrailing + adj,
       });
 
       // normalized to 0...360
       let angleLeadingNormalized = angleLeadingShifted.normalized.degrees;
       let angleTrailingNormalized = angleTrailingShifted.normalized.degrees;
-      
+
       let angleMidShifted = (angleLeadingNormalized + angleTrailingNormalized) / 2;
-      
+
       // undo shifting
       return angleMidShifted - adj;
     })();
-    
+
     return new Angle({
       angleUnit: 'degrees',
       angleValue: angleMidDeg,
@@ -169,13 +176,13 @@ export class Angle {
     if(angleA.angleUnit === angleB.angleUnit){
       return new Angle({
         angleUnit: angleA.angleUnit,
-        angleValue: angleA.angleRawValue + angleB.angleRawValue, 
+        angleValue: angleA.angleRawValue + angleB.angleRawValue,
       });
     };
 
     return new Angle({
       angleUnit: 'degrees',
-      angleValue: angleA.degrees + angleB.degrees, 
+      angleValue: angleA.degrees + angleB.degrees,
     });
   };
 };

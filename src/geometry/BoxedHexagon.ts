@@ -5,6 +5,7 @@ import { Point } from "./Point";
 import { Line } from "./Line";
 import { Vector2DValue } from "./Vector2D";
 import { BoxedPolygon } from "./interfaces/BoxedPolygon";
+import { Cloneable } from "../types/Cloneable";
 
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
@@ -30,7 +31,10 @@ export type BoxedHexagonInit = (
   }
 );
 
-export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
+export class BoxedHexagon implements
+  BoxedPolygon<BoxedHexagonValue>,
+  Cloneable<BoxedHexagon>
+{
 
   origin: Point;
   circumRadius: number;

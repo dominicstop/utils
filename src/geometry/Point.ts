@@ -1,4 +1,5 @@
 import { InterpolationHelpers } from "../helpers";
+import { Cloneable } from "../types/Cloneable";
 import { Line } from "./Line";
 import { Rect } from "./Rect";
 import { Vector2D } from "./Vector2D";
@@ -8,7 +9,7 @@ export type PointValue = {
   y: number;
 };
 
-export class Point {
+export class Point implements Cloneable<Point> {
 
   x: number;
   y: number;
@@ -72,6 +73,7 @@ export class Point {
       || Number.isNaN(this.y)
     );
   };
+
 
   toString(): string {
     return `Point(${this.x}, ${this.y})`;
