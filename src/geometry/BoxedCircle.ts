@@ -1,4 +1,5 @@
 import { Angle } from "./Angle";
+import { BoxedShape } from "./interfaces/BoxedShape";
 import { Point } from "./Point";
 import { Rect } from "./Rect";
 
@@ -18,7 +19,7 @@ export type BoxedCircleInit = {
   }
 );
 
-export class BoxedCircle {
+export class BoxedCircle implements BoxedShape<BoxedCircleValue> {
   origin: Point;
   radius: number;
 
@@ -26,7 +27,7 @@ export class BoxedCircle {
 
   constructor(args: BoxedCircleInit){
     this.radius = args.radius;
-    
+
     switch(args.mode) {
       case 'relativeToOrigin':
         this.origin = args.origin;
@@ -36,17 +37,17 @@ export class BoxedCircle {
         const originX = args.center.x - args.radius;
         const originY = args.center.y - args.radius;
 
-        this.origin = new Point({ 
-          x: originX, 
+        this.origin = new Point({
+          x: originX,
           y: originY
         });
         break;
     };
-  };
+  }
 
   get asValue(): BoxedCircleValue {
     return {
-      center: this.centerPoint,
+      center: this.center,
       radius: this.radius,
     };
   };
@@ -55,14 +56,14 @@ export class BoxedCircle {
     return this.radius * 2;
   };
 
-  get centerPoint(): Point {
+  get center(): Point {
     return new Point({
       x: this.origin.x + this.radius,
       y: this.origin.y + this.radius,
     });
   };
 
-  get enclosingRect(): Rect {
+  get boundingBox(): Rect {
     const diameter = this.diameter;
 
     return new Rect({
@@ -77,26 +78,35 @@ export class BoxedCircle {
 
   pointAlongPath(angle: Angle): Point {
     return angle.getPointAlongCircle({
-      centerPoint: this.centerPoint,
+      centerPoint: this.center,
       radius: this.radius,
       isClockwise: false,
     });
   };
 
-  computeDistanceFromOtherCircle(otherCircle: BoxedCircle): number {
+  isPointInside(point: Point): boolean {
+    const dx = point.x - this.center.x;
+    const dy = point.y - this.center.y;
+
+    // squared distance between the point and the circle's center
+    const distSq = dx * dx + dy * dy;
+
+    // squared radius
+    const radiusSq = this.radius * this.radius;
+
+    return distSq <= radiusSq;
+  };
+
+  computeDistanceFromOther(otherCircle: BoxedCircle): number {
     return BoxedCircle.computeDistanceBetweenTwoCircles(this, otherCircle);
   };
 
-  isCollidingWithOtherCircle(otherCircle: BoxedCircle): boolean {
-    return BoxedCircle.checkCollisionBetweenTwoCircles(this, otherCircle, this.epsilon);
+  isEdgeToEdgeWithOther(other: this): boolean {
+    return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, other, this.epsilon);
   };
 
-  isEdgeToEdgeWithOtherCircle(otherCircle: BoxedCircle): boolean {
-    return BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(this, otherCircle, this.epsilon);
-  };
-
-  isInsideRect(rect: Rect): boolean {
-    return BoxedCircle.checkIfCircleIsInsideRect(this, rect, this.epsilon);
+  isCollidingWithOther(other: this): boolean {
+    return BoxedCircle.checkCollisionBetweenTwoCircles(this, other, this.epsilon);
   };
 
   // MARK: - Init Alias
@@ -116,27 +126,27 @@ export class BoxedCircle {
   /**
    * Euclidean distance
    * * Given two circles: `c1 = (x1, y1, r1)` and  `c2 = (x2, y2, r2)`
-   * 
-   * * The distance d between the centers of two circles `(c1, c2)` is computed via the 
+   *
+   * * The distance d between the centers of two circles `(c1, c2)` is computed via the
    *   Euclidean distance formula.
-   * 
+   *
    * * formula: `sqrt( (x2 - x1)^2 + (y2 - y1)^2 )`
    */
   static computeDistanceBetweenTwoCircles(circleA: BoxedCircle, circleB: BoxedCircle): number {
-    const dx = circleA.centerPoint.x - circleB.centerPoint.x;
-    const dy = circleA.centerPoint.y - circleB.centerPoint.y;
+    const dx = circleA.center.x - circleB.center.x;
+    const dy = circleA.center.y - circleB.center.y;
 
     return Math.sqrt(dx * dx + dy * dy);
   };
 
   /**
    * Collision detection for two circles
-   * 
-   * * Two circles are overlapping if the distance between their centers is less than 
+   *
+   * * Two circles are overlapping if the distance between their centers is less than
    *   the sum of their radii:  `d < (r1 + r2)`
    */
   static checkCollisionBetweenTwoCircles(
-    circleA: BoxedCircle, 
+    circleA: BoxedCircle,
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
@@ -147,10 +157,10 @@ export class BoxedCircle {
   };
 
   /**
-   * Two circles are "edge-to-edge" (touching) if: `d=r1+r2` 
+   * Two circles are "edge-to-edge" (touching) if: `d=r1+r2`
    */
   static checkIfTwoCirclesAreEdgeToEdge(
-    circleA: BoxedCircle, 
+    circleA: BoxedCircle,
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
@@ -161,10 +171,10 @@ export class BoxedCircle {
   };
 
   /**
-   * 
+   *
    * Collision Detection (Circle-Box)
-   * 
-   * * A circle (x, y, r) is inside a box defined by minimum (xmin, ymin) 
+   *
+   * * A circle (x, y, r) is inside a box defined by minimum (xmin, ymin)
    *   and maximum (xmax, ymax) coordinates if:
    * ```
    * x - r >= xmin
@@ -174,13 +184,13 @@ export class BoxedCircle {
    * ```
    */
   static checkIfCircleIsInsideRect(
-    circle: BoxedCircle, 
+    circle: BoxedCircle,
     rect: Rect,
     epsilon: number = 1e-10
   ): boolean {
-    const { x: centerX, y: centerY } = circle.centerPoint;
+    const { x: centerX, y: centerY } = circle.center;
     const r = circle.radius;
-  
+
     return (
       (centerX - r) >= (rect.minX - epsilon) &&
       (centerX + r) <= (rect.maxX + epsilon) &&

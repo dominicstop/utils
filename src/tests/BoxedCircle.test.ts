@@ -11,7 +11,7 @@ describe("BoxedCircle", () => {
       radius: 5,
     });
 
-    expect(circle.centerPoint).toEqual(new Point({ x: 15, y: 25 }));
+    expect(circle.center).toEqual(new Point({ x: 15, y: 25 }));
   });
 
   test("origin", () => {
@@ -30,7 +30,7 @@ describe("BoxedCircle", () => {
       radius: 10,
     });
 
-    const rect = circle.enclosingRect;
+    const rect = circle.boundingBox;
     expect(rect.origin).toEqual(new Point({ x: 0, y: 0 }));
     expect(rect.size).toEqual({ width: 20, height: 20 });
   });
@@ -40,7 +40,7 @@ describe("BoxedCircle", () => {
       center: new Point({ x: 0, y: 0 }),
       radius: 10,
     });
-    
+
     const angle = Angle.initFromDegrees(0);
     const point = circle.pointAlongPath(angle);
 
@@ -207,7 +207,7 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 100, y: 100 }),
         radius: 10,
       });
-      
+
       const rect = new Rect({
         mode: 'originAndSize',
         origin: new Point({ x: 0, y: 0 }),
