@@ -1,5 +1,6 @@
 import { Cloneable } from "../../types/Cloneable";
 import { ValueRepresentable } from "../../types/ValueRepresentable";
+import { AnyValueRepresentable, ValueRepresentable } from "../../types/ValueRepresentable";
 import { Point, PointValue } from "../Point";
 import { Rect } from "../Rect";
 
@@ -29,3 +30,4 @@ export interface BoxedShape<
   isCollidingWithOther(other: this): boolean;
 };
 
+export type AnyBoxedShape = BoxedShape<AnyValueRepresentable>;

@@ -1,6 +1,8 @@
 
+export type AnyValueRepresentable = Record<string, unknown>;
+
 export interface ValueRepresentable<
-  Value extends Record<string, unknown>
+  Value extends AnyValueRepresentable
 > {
 
   get asValue(): Value;
