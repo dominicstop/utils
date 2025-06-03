@@ -153,14 +153,14 @@ export class Vector2D implements
   // MARK: - Methods (Math Operations)
   // -----------------------------
 
-  addWithOtherVector(otherVector: Vector2D): Vector2D {
+  addedWithOther(otherVector: Vector2D): Vector2D {
     return new Vector2D({
       dx: this.dx + otherVector.dx,
       dy: this.dy + otherVector.dy,
     });
   }
 
-  subtractWithOtherVector(otherVector: Vector2D): Vector2D {
+  subtractedWithOther(otherVector: Vector2D): Vector2D {
     return new Vector2D({
       dx: this.dx - otherVector.dx,
       dy: this.dy - otherVector.dy,
@@ -226,7 +226,7 @@ export class Vector2D implements
 
     return vectorNormalized
       .multipliedByScalar(2 * dot)
-      .subtractWithOtherVector(this);
+      .subtractedWithOther(this);
   }
 
   limit(maxMagnitude: number): Vector2D {
@@ -287,7 +287,7 @@ export class Vector2D implements
     if (vectors.length === 0) return Vector2D.zero;
 
     const sum = vectors.reduce(
-      (acc, v) => acc.addWithOtherVector(v),
+      (acc, v) => acc.addedWithOther(v),
       Vector2D.zero
     );
 

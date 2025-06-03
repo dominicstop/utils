@@ -60,14 +60,14 @@ describe("Vector", () => {
     const a = new Vector2D({ dx: 1, dy: 2 });
     const b = new Vector2D({ dx: 3, dy: 4 });
 
-    expect(a.addWithOtherVector(b).asValue).toEqual({ dx: 4, dy: 6 });
+    expect(a.addedWithOther(b).asValue).toEqual({ dx: 4, dy: 6 });
   });
 
   test("subtractWithOtherVector", () => {
     const a = new Vector2D({ dx: 1, dy: 2 });
     const b = new Vector2D({ dx: 3, dy: 4 });
 
-    expect(b.subtractWithOtherVector(a).asValue).toEqual({ dx: 2, dy: 2 });
+    expect(b.subtractedWithOther(a).asValue).toEqual({ dx: 2, dy: 2 });
   });
 
   test("multipliedByScalar", () => {
