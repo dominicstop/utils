@@ -242,7 +242,7 @@ export class Rect implements BoxedPolygon<
     });
   };
 
-  distanceToOther(other: Rect){
+  computeDistanceToOther(other: Rect){
     return this.center.getDistance(other.center);
   };
 

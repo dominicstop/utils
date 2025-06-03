@@ -108,7 +108,7 @@ export class BoxedCircle implements BoxedShape<
     return distSq <= radiusSq;
   };
 
-  distanceToOther(other: BoxedCircle): number {
+  computeDistanceToOther(other: BoxedCircle): number {
     return this.center.getDistance(other.center);
   };
 
@@ -145,7 +145,7 @@ export class BoxedCircle implements BoxedShape<
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = circleA.distanceToOther(circleB);
+    const distance = circleA.computeDistanceToOther(circleB);
     const radiusSum = circleA.radius + circleB.radius;
 
     return distance <= radiusSum + epsilon;
@@ -159,7 +159,7 @@ export class BoxedCircle implements BoxedShape<
     circleB: BoxedCircle,
     epsilon: number = 1e-10
   ): boolean {
-    const distance = circleA.distanceToOther(circleB);
+    const distance = circleA.computeDistanceToOther(circleB);
     const expectedDistance = circleA.radius + circleB.radius;
 
     return Math.abs(distance - expectedDistance) < epsilon;

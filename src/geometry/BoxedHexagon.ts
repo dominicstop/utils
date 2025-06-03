@@ -259,7 +259,7 @@ export class BoxedHexagon implements BoxedPolygon<
     });
   };
 
-  distanceToOther(other: BoxedHexagon): number {
+  computeDistanceToOther(other: BoxedHexagon): number {
     return this.center.getDistance(other.center);
   };
 
