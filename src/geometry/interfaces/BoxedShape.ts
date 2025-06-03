@@ -1,15 +1,13 @@
-import { Cloneable } from "../../types/Cloneable";
-import { ValueRepresentable } from "../../types/ValueRepresentable";
+import { Cloneable, SomeCloneable } from "../../types/Cloneable";
 import { AnyValueRepresentable, ValueRepresentable } from "../../types/ValueRepresentable";
 import { Point, PointValue } from "../Point";
 import { Rect } from "../Rect";
 
 
 export interface BoxedShape<
-  Self,
-  Value extends Record<string, unknown>
+  Value extends AnyValueRepresentable
 > extends
-  Cloneable<Self>,
+  SomeCloneable,
   ValueRepresentable<Value>
 {
 
