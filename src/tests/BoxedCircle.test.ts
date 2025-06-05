@@ -62,7 +62,10 @@ describe("BoxedCircle", () => {
         radius: 5,
       });
 
-      expect(a.computeDistanceToOther(b)).toBeCloseTo(50);
+      // distance between centers = 50,
+      // radius sum = 15,
+      // so expected = 35
+      expect(a.computeDistanceToOther(b)).toBeCloseTo(35);
     });
 
     test('same center', () => {
@@ -70,7 +73,8 @@ describe("BoxedCircle", () => {
       const a = BoxedCircle.initFromValue({ center, radius: 5 });
       const b = BoxedCircle.initFromValue({ center, radius: 15 });
 
-      expect(a.computeDistanceToOther(b)).toBeCloseTo(0);
+      // Same center, radius sum = 20, so expected = -20
+      expect(a.computeDistanceToOther(b)).toBeCloseTo(-20);
     });
   });
 
@@ -80,11 +84,18 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 0, y: 0 }),
         radius: 10,
       });
+
       const b = BoxedCircle.initFromValue({
         center: new Point({ x: 15, y: 0 }),
         radius: 10,
       });
 
+      const distance = a.computeDistanceToOther(b);
+
+      // distance = 15,
+      // radius sum = 20
+      // delta: -5, result: overlapping
+      expect(distance).toBeLessThan(0);
       expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(true);
     });
 
@@ -93,11 +104,15 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 0, y: 0 }),
         radius: 10,
       });
+
       const b = BoxedCircle.initFromValue({
         center: new Point({ x: 25, y: 0 }),
         radius: 10,
       });
 
+      // distance = 25,
+      // radius sum = 20
+      // result: not overlapping
       expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(false);
     });
 
@@ -111,6 +126,7 @@ describe("BoxedCircle", () => {
         radius: 10,
       });
 
+      // Distance = 20, radius sum = 20 → touching
       expect(BoxedCircle.checkCollisionBetweenTwoCircles(a, b)).toBe(true);
     });
   });
@@ -121,11 +137,15 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 0, y: 0 }),
         radius: 10,
       });
+
       const b = BoxedCircle.initFromValue({
         center: new Point({ x: 20, y: 0 }),
         radius: 10,
       });
 
+      // center distance = 20
+      // total radius = 20
+      // result: true
       expect(BoxedCircle.checkIfTwoCirclesAreEdgeToEdge(a, b)).toBe(true);
     });
 
@@ -134,6 +154,7 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 0, y: 0 }),
         radius: 10,
       });
+
       const b = BoxedCircle.initFromValue({
         center: new Point({ x: 15, y: 0 }),
         radius: 10,
@@ -147,6 +168,7 @@ describe("BoxedCircle", () => {
         center: new Point({ x: 0, y: 0 }),
         radius: 10,
       });
+
       const b = BoxedCircle.initFromValue({
         center: new Point({ x: 25, y: 0 }),
         radius: 10,

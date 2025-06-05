@@ -108,7 +108,7 @@ export class BoxedCircle implements BoxedShape<
   };
 
   computeDistanceToOther(other: BoxedCircle): number {
-    return this.center.getDistance(other.center);
+    return BoxedCircle.computeDistanceBetweenTwoCricles(this, other);
   };
 
   isEdgeToEdgeWithOther(other: this): boolean {
@@ -134,7 +134,22 @@ export class BoxedCircle implements BoxedShape<
   // ----------------------
 
   /**
-   * Collision detection for two circles
+   * the distance between the circle's centers minus
+   * the sum of their radii:  `d < (r1 + r2)`
+   */
+  static computeDistanceBetweenTwoCricles(
+    circleA: BoxedCircle,
+    circleB: BoxedCircle
+  ): number {
+    const centerDistance = circleA.center.getDistance(circleB.center);
+    const radiusSum = circleA.radius + circleB.radius;
+
+    return centerDistance - radiusSum;
+  };
+
+  /**
+   * Collision detection for two circles:
+   * returns true if two circles are colliding
    *
    * * Two circles are overlapping if the distance between their centers is less than
    *   the sum of their radii:  `d < (r1 + r2)`
@@ -145,9 +160,7 @@ export class BoxedCircle implements BoxedShape<
     epsilon: number = 1e-10
   ): boolean {
     const distance = circleA.computeDistanceToOther(circleB);
-    const radiusSum = circleA.radius + circleB.radius;
-
-    return distance <= radiusSum + epsilon;
+    return distance < epsilon;
   };
 
   /**
@@ -159,9 +172,7 @@ export class BoxedCircle implements BoxedShape<
     epsilon: number = 1e-10
   ): boolean {
     const distance = circleA.computeDistanceToOther(circleB);
-    const expectedDistance = circleA.radius + circleB.radius;
-
-    return Math.abs(distance - expectedDistance) < epsilon;
+    return Math.abs(distance) < epsilon;
   };
 
   /**
