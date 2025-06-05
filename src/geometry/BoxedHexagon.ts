@@ -29,10 +29,7 @@ export type BoxedHexagonInit = (
   }
 );
 
-export class BoxedHexagon implements BoxedPolygon<
-  BoxedHexagon,
-  BoxedHexagonValue
-> {
+export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
 
   origin: Point;
   circumRadius: number;

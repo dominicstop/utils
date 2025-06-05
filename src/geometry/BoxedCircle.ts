@@ -20,7 +20,6 @@ export type BoxedCircleInit = {
 );
 
 export class BoxedCircle implements BoxedShape<
-  BoxedCircle,
   BoxedCircleValue
 > {
   origin: Point;

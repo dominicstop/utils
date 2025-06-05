@@ -26,7 +26,6 @@ export type RectInit = (
 );
 
 export class Rect implements BoxedPolygon<
-  Rect,
   RectValue
 > {
   origin: Point;

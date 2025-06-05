@@ -1,4 +1,4 @@
-import { Cloneable, SomeCloneable } from "../../types/Cloneable";
+import { SomeCloneable } from "../../types/Cloneable";
 import { AnyValueRepresentable, ValueRepresentable } from "../../types/ValueRepresentable";
 import { Point, PointValue } from "../Point";
 import { Rect } from "../Rect";
