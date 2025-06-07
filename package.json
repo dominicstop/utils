@@ -22,7 +22,7 @@
     "typescript-event-emitter"
   ],
   "repository": "https://github.com/dominicstop/utils",
-  "author": "Dominic Go <dominicstop@gmail.com> (https://github.com/dominicstop)",
+  "author": "Dominic Go <dominic@dominicgo.dev> (https://github.com/dominicstop)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dominicstop/utils/issues"
