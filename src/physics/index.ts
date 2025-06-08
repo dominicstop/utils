@@ -1,5 +1,6 @@
 
 export * from './Particle';
+export * from './ParticleShapes';
 export * from './PhysicsEngine';
 
 export * from './CentralAttractionForce';
