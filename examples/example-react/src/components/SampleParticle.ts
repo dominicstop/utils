@@ -28,12 +28,15 @@ export function createSampleParticle(args: {
     dy: randomY,
   });
 
+  const RADIUS_MIN = 75;
+  const RADIUS_VARIANCE = 100;
+
   const randomRadius = InterpolationHelpers.rangedLerpUsingInputValue(
     Math.random(),
     0,
     1,
-    100,
-    500,
+    RADIUS_MIN,
+    RADIUS_MIN + RADIUS_VARIANCE,
   );
 
   const circleShape = new BoxedCircle({
