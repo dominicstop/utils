@@ -65,6 +65,23 @@ export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
     })();
   };
 
+  // MARK: Getter + Setter Pairs
+  // ---------------------------
+
+  get center(): Point {
+    return this.circumCircle.center;
+  };
+
+  set center(newCenter: Point) {
+    const originX = newCenter.x - this.circumRadius;
+    const originY = newCenter.y - this.circumRadius;
+
+    this.origin = new Point({
+      x: originX,
+      y: originY
+    });
+  };
+
   // MARK: Getters
   // -------------
 
@@ -109,10 +126,6 @@ export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
       origin: this.origin,
       radius: this.circumRadius,
     });
-  };
-
-  get center(): Point {
-    return this.circumCircle.center;
   };
 
   get boundingBox(): Rect {

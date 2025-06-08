@@ -65,6 +65,16 @@ export class BoxedCircle implements BoxedShape<
     });
   };
 
+  set center(newCenter: Point) {
+    const originX = newCenter.x - this.radius;
+    const originY = newCenter.y - this.radius;
+
+    this.origin = new Point({
+      x: originX,
+      y: originY
+    });
+  };
+
   get boundingBox(): Rect {
     const diameter = this.diameter;
 

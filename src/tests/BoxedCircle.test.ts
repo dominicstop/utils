@@ -1,4 +1,4 @@
-import { BoxedCircle, Rect } from "../geometry";
+import { BoxedCircle, BoxedCircleValue, BoxedShape, Rect } from "../geometry";
 import { Point } from "../geometry";
 import { Angle } from "../geometry";
 
@@ -237,6 +237,27 @@ describe("BoxedCircle", () => {
       });
 
       expect(BoxedCircle.checkIfCircleIsInsideRect(circle, rect)).toBe(false);
+    });
+  });
+
+  describe("BoxedCircle implements BoxedShape", () => {
+    test("BoxedCircle.center", () => {
+      const circle = new BoxedCircle({
+        mode: "relativeToOrigin",
+        origin: new Point({ x: 0, y: 0 }),
+        radius: 10,
+      });
+
+      const boxedShape: BoxedShape<BoxedCircleValue> = circle;
+
+      // initial radius and center
+      expect(boxedShape.asValue.radius).toBe(10);
+      expect(boxedShape.center).toEqual(new Point({ x: 10, y: 10 }));
+
+      // modify center, origin should shift
+      circle.center = new Point({ x: 20, y: 20 });
+      expect(boxedShape.center).toEqual(new Point({ x: 20, y: 20 }));
+      expect(boxedShape.origin).toEqual(new Point({ x: 10, y: 10 }));
     });
   });
 });

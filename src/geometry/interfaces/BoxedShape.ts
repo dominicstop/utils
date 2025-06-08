@@ -33,6 +33,9 @@ export interface BoxedShape<
   /** Returns the geometric center of the shape. */
   get center(): Point;
 
+  /** sets the geometric center of the shape. */
+  set center(newCenter: Point);
+
   /**
    * Checks whether a given point lies inside the shape.
    *
