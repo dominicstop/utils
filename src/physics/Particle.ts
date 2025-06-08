@@ -154,8 +154,7 @@ export class Particle<
     return this.velocity.magnitude < restThreshold;
   };
 
-
-isEdgeToEdgeWithOther(other: Particle<ParticleShape>): boolean {
+  isEdgeToEdgeWithOther(other: Particle<ParticleShape>): boolean {
     const distance = this.computeDistanceToOther(other);
     const epsilon = 1e-8; // Small tolerance for floating-point precision
 

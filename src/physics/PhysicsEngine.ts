@@ -21,6 +21,8 @@ export class PhysicsEngine<
   restitutionCoefficient: number = 0.8;
   collisionIterations: number = 1;
 
+  dampingFactor: number = 0.98;
+
   constructor() {
     // no-eop
   }
@@ -85,6 +87,7 @@ export class PhysicsEngine<
   update(deltaTime: number): void {
     for (const particle of this.particles) {
       particle.resetAcceleration();
+
       if (!particle.isStatic) {
         particle.applyForce(this.gravity.multipliedByScalar(particle.mass));
       }
@@ -102,10 +105,14 @@ export class PhysicsEngine<
 
     for (const particle of this.particles) {
       particle.update(deltaTime);
+
       if (this.worldBounds) {
         this.handleBoundaryConditions(particle);
-      }
-    }
+      };
+
+      const velocityDampended = particle.velocity.multipliedByScalar(this.dampingFactor);
+      particle.setVelocity(velocityDampended);
+    };
 
     for (let i = 0; i < this.collisionIterations; i++) {
       this.resolveCollisions();
