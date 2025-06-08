@@ -12,13 +12,14 @@ export type ParticleInit<
   shape: ParticleShape;
 };
 
+
 export class Particle<
   ParticleShape extends AnyBoxedShape
 > implements SomeShapeParticle<ParticleShape> {
 
   id: string;
 
-  position: Vector2D;
+  private _position!: Vector2D;
   previousPosition: Vector2D;
 
   velocity: Vector2D;
@@ -30,7 +31,19 @@ export class Particle<
   shape: ParticleShape;
   isStatic: boolean;
 
+  get position(): Vector2D {
+    return this._position;
+  };
+
+  set position(newValue: Vector2D) {
+    this._position = newValue;
+    this.shape.center = newValue.asPoint;
+  };
+
   constructor(args: ParticleInit<ParticleShape>) {
+
+    this.shape = args.shape;
+
     this.id = args.id;
 
     this.position = args.position.clone();
@@ -46,9 +59,8 @@ export class Particle<
     this.velocity = args.initialVelocity ?? Vector2D.zero;
     this.acceleration = Vector2D.zero;
 
-    this.shape = args.shape;
     this.isStatic = args.mass === 0;
-  }
+  };
 
   clone() {
     const clone = new Particle<ParticleShape>({
@@ -149,5 +161,4 @@ isEdgeToEdgeWithOther(other: Particle<ParticleShape>): boolean {
 
     return Math.abs(distance) < epsilon && !this.isCollidingWithOther(other);
   }
-
 };
