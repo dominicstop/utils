@@ -3321,6 +3321,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jest@npm:26.0.7":
+  version: 26.0.7
+  resolution: "@types/jest@npm:26.0.7"
+  dependencies:
+    jest-diff: ^25.2.1
+    pretty-format: ^25.2.1
+  checksum: be0d4aeec6b0a5c25dbf49a9327da6b02ab6ae83f90d6117a32766350471062d5ca14cac1f1361896cf9b60184433e91a517ae802f749a76f1d0c77e00ea2afb
+  languageName: node
+  linkType: hard
+
 "@types/jest@npm:^29.5.14":
   version: 29.5.14
   resolution: "@types/jest@npm:29.5.14"
@@ -3361,6 +3371,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prop-types@npm:*":
+  version: 15.7.14
+  resolution: "@types/prop-types@npm:15.7.14"
+  checksum: d0c5407b9ccc3dd5fae0ccf9b1007e7622ba5e6f1c18399b4f24dff33619d469da4b9fa918a374f19dc0d9fe6a013362aab0b844b606cfc10676efba3f5f736d
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^19.1.2":
   version: 19.1.6
   resolution: "@types/react-dom@npm:19.1.6"
@@ -3370,12 +3387,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.1.2":
+"@types/react-native@npm:0.63.2":
+  version: 0.63.2
+  resolution: "@types/react-native@npm:0.63.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: dbe7e1a24a5ba4b42d123c53165c771e91d8f2a7a3713d074050d3cefdc2ec929042cf47c1c93d15854be324c5f512bdcf58758cdd525a4c3db25e3c59038806
+  languageName: node
+  linkType: hard
+
+"@types/react-test-renderer@npm:16.9.2":
+  version: 16.9.2
+  resolution: "@types/react-test-renderer@npm:16.9.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: 6b179e07615cffac36784811f8a051bdbf01d3168236b3b780e32fcce3abee392883c775211c4626996fe5eb473e767124178b4e2de71313a604e19863ceb5f8
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:*, @types/react@npm:^19.1.2":
   version: 19.1.6
   resolution: "@types/react@npm:19.1.6"
   dependencies:
     csstype: ^3.0.2
   checksum: 7f4d2e5fd0c1afa6aef956e551c982a59c3ccf37cf30b877300306dcae87e0c4bf7b28b54676b1783f4ca92e730af6fb7a4c1b7f6df27ba14579aa1617a58b09
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:16.9.43":
+  version: 16.9.43
+  resolution: "@types/react@npm:16.9.43"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^2.2.0
+  checksum: c3d83bbf57ba2b177cb231352a3f579556f3a360659e94f1d6b5268ad913e2ddb89e1f60bf493f3ad355d17835b23a985e0da8283f2e95784dcaa49b43b25a66
   languageName: node
   linkType: hard
 
@@ -5465,6 +5510,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csstype@npm:^2.2.0":
+  version: 2.6.21
+  resolution: "csstype@npm:2.6.21"
+  checksum: 2ce8bc832375146eccdf6115a1f8565a27015b74cce197c35103b4494955e9516b246140425ad24103864076aa3e1257ac9bab25a06c8d931dd87a6428c9dccf
+  languageName: node
+  linkType: hard
+
 "csstype@npm:^3.0.2":
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
@@ -6772,6 +6824,10 @@ __metadata:
     "@babel/core": ^7.8.4
     "@babel/runtime": ^7.8.4
     "@react-native-community/eslint-config": ^1.1.0
+    "@types/jest": 26.0.7
+    "@types/react": 16.9.43
+    "@types/react-native": 0.63.2
+    "@types/react-test-renderer": 16.9.2
     babel-jest: ^25.1.0
     eslint: ^6.5.1
     jest: ^25.1.0
@@ -6779,6 +6835,7 @@ __metadata:
     react: 16.13.1
     react-native: 0.63.5
     react-test-renderer: 16.13.1
+    typescript: 3.9.7
   languageName: unknown
   linkType: soft
 
@@ -9227,7 +9284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^25.5.0":
+"jest-diff@npm:^25.2.1, jest-diff@npm:^25.5.0":
   version: 25.5.0
   resolution: "jest-diff@npm:25.5.0"
   dependencies:
@@ -12278,7 +12335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^25.1.0, pretty-format@npm:^25.2.0, pretty-format@npm:^25.5.0":
+"pretty-format@npm:^25.1.0, pretty-format@npm:^25.2.0, pretty-format@npm:^25.2.1, pretty-format@npm:^25.5.0":
   version: 25.5.0
   resolution: "pretty-format@npm:25.5.0"
   dependencies:
@@ -14846,6 +14903,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:3.9.7":
+  version: 3.9.7
+  resolution: "typescript@npm:3.9.7"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: d549bf1d3a93796b45be9d1dbebbef63777f8cc4d788461f4bfdb6cb07371a97d3e471c7f39dbe31107e8a25d6d8b2ef5e967af7e8e1768d9560bd95095b360b
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^5.8.3, typescript@npm:~5.8.3":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
@@ -14853,6 +14920,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: cb1d081c889a288b962d3c8ae18d337ad6ee88a8e81ae0103fa1fecbe923737f3ba1dbdb3e6d8b776c72bc73bfa6d8d850c0306eed1a51377d2fccdfd75d92c4
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@3.9.7#~builtin<compat/typescript>":
+  version: 3.9.7
+  resolution: "typescript@patch:typescript@npm%3A3.9.7#~builtin<compat/typescript>::version=3.9.7&hash=3bd3d3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: be4742230d87145344866f264771c0d78fe548479694279de1d8c9b1ea0942b1016a1957f87952924b370f86107bc71d95eb7feea16ad8875c61c571aca280e6
   languageName: node
   linkType: hard
 
