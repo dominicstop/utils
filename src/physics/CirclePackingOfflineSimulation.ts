@@ -13,6 +13,8 @@ export class CirclePackingOfflineSimulation
   engine: PhysicsEngine<CircleParticle>;
   isRunning: boolean = false;
 
+  shouldLog = false;
+
   private _totalSimulatedTime: number = 0;
   private _iterationCount: number = 0;
 
@@ -92,6 +94,19 @@ export class CirclePackingOfflineSimulation
     this.engine.update(this.fixedDeltaTimeSeconds);
     this.onPostStep?.(this.fixedDeltaTimeSeconds);
     this._totalSimulatedTime += this.fixedDeltaTimeSeconds;
+
+    if(this.shouldLog){
+      console.log({
+        'isRunning': this.isRunning,
+        'iterationCount': this._iterationCount,
+        'totalSimulatedTime': this._totalSimulatedTime,
+        'getTotalKineticEnergy': this.engine.getTotalKineticEnergy(),
+        'isKineticEnergyNegligible': this.isKineticEnergyNegligible(),
+        'checkIfAllParticlesAtRest': this.engine.checkIfAllParticlesAtRest(),
+        'this.isStable': this.isStable(),
+      });
+      this.engine.logState();
+    };
   };
 
   reset() {
