@@ -30,7 +30,7 @@ for (let i = 0; i < 6; i++) {
 engine.addForce(
   new CentralAttractionForce(
     CANVAS_RECT.center.asVector,
-    10,
+    8,
     true
   )
 );
@@ -75,6 +75,7 @@ export const PhysicsCanvas: React.FC = () => {
     let totalTime = 0;
     const interval = setInterval(() => {
       engine.update(TIME_STEP);
+      engine.logState();
       render();
     }, FRAME_TIME_MS);
 
