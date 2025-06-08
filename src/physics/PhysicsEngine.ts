@@ -18,7 +18,7 @@ export class PhysicsEngine<
   worldBounds: Rect | null = null;
 
   gravity: Vector2D = Vector2D.zero;
-  restitutionCoefficient: number = 0.8;
+  restitutionCoefficient: number = 0.6;
   collisionIterations: number = 1;
 
   dampingFactor: number = 0.98;

@@ -14,7 +14,7 @@ export class OfflineSimulation<SomeParticle extends AnyParticle>
   private _totalSimulatedTime: number = 0;
   private _iterationCount: number = 0;
 
-  readonly fixedDeltaTime: number;
+  readonly fixedDeltaTimeSeconds: number;
   maxIterations: number = 200;
 
   onPreStep: ((deltaTime: number) => void) | null = null;
@@ -23,7 +23,7 @@ export class OfflineSimulation<SomeParticle extends AnyParticle>
 
   constructor(engine: PhysicsEngine<SomeParticle>, fixedDeltaTime: number = 1 / 60) {
     this.engine = engine;
-    this.fixedDeltaTime = fixedDeltaTime;
+    this.fixedDeltaTimeSeconds = fixedDeltaTime;
   }
 
   get totalSimulatedTime(): number {
@@ -51,10 +51,10 @@ export class OfflineSimulation<SomeParticle extends AnyParticle>
   };
 
   step(): void {
-    this.onPreStep?.(this.fixedDeltaTime);
-    this.engine.update(this.fixedDeltaTime);
-    this.onPostStep?.(this.fixedDeltaTime);
-    this._totalSimulatedTime += this.fixedDeltaTime;
+    this.onPreStep?.(this.fixedDeltaTimeSeconds);
+    this.engine.update(this.fixedDeltaTimeSeconds);
+    this.onPostStep?.(this.fixedDeltaTimeSeconds);
+    this._totalSimulatedTime += this.fixedDeltaTimeSeconds;
   }
 
   reset(): void {

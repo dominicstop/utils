@@ -24,7 +24,7 @@ export interface SomeOfflineSimulation<
   readonly totalSimulatedTime: number
 
   /** Fixed time step for physics updates (e.g., 1/60th of a second) */
-  readonly fixedDeltaTime: number;
+  readonly fixedDeltaTimeSeconds: number;
 
   // MARK: - Callbacks
   // -----------------

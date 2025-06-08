@@ -7,6 +7,8 @@ export * from './CentralAttractionForce';
 export * from './DampingForce';
 export * from './RepulsionForce';
 
+export * from './CirclePackingOfflineSimulation';
+
 export type * from './AnyParticle';
 export type * from './SomeShapeParticle';
 export type * from './SomeParticleForce';
