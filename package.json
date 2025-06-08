@@ -15,6 +15,9 @@
     "lib/**/*",
     "src/**/*"
   ],
+  "workspaces": [
+    "examples/*"
+  ],
   "keywords": [
     "emitter",
     "event-emitter",
