@@ -7,9 +7,11 @@
   "types": "lib/module/index.d.ts",
   "source": "src/index",
   "exports": {
-    "import": "./lib/module/index.js",
-    "require": "./lib/commonjs/index.js",
-    "types": "./lib/module/index.d.ts"
+    ".": {
+      "import": "./lib/module/index.js",
+      "require": "./lib/commonjs/index.js",
+      "types": "./lib/module/index.d.ts"
+    }
   },
   "files": [
     "lib/**/*",

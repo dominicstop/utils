@@ -1391,7 +1391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dominicstop/utils@workspace:.":
+"@dominicstop/utils@workspace:*, @dominicstop/utils@workspace:.":
   version: 0.0.0-use.local
   resolution: "@dominicstop/utils@workspace:."
   dependencies:
@@ -4365,6 +4365,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-react@workspace:examples/example-react"
   dependencies:
+    "@dominicstop/utils": "workspace:*"
     "@eslint/js": ^9.25.0
     "@types/react": ^19.1.2
     "@types/react-dom": ^19.1.2
@@ -4378,6 +4379,7 @@ __metadata:
     typescript: ~5.8.3
     typescript-eslint: ^8.30.1
     vite: ^6.3.5
+    vite-tsconfig-paths: ^5.1.4
   languageName: unknown
   linkType: soft
 
@@ -4894,6 +4896,13 @@ __metadata:
     merge2: "npm:^1.4.1"
     slash: "npm:^4.0.0"
   checksum: f3d84ced58a901b4fcc29c846983108c426631fe47e94872868b65565495f7bee7b3defd68923bd480582771fd4bbe819217803a164a618ad76f1d22f666f41e
+  languageName: node
+  linkType: hard
+
+"globrex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "globrex@npm:0.1.2"
+  checksum: adca162494a176ce9ecf4dd232f7b802956bb1966b37f60c15e49d2e7d961b66c60826366dc2649093cad5a0d69970cfa8875bd1695b5a1a2f33dcd2aa88da3c
   languageName: node
   linkType: hard
 
@@ -8506,6 +8515,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsconfck@npm:^3.0.3":
+  version: 3.1.6
+  resolution: "tsconfck@npm:3.1.6"
+  peerDependencies:
+    typescript: ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    tsconfck: bin/tsconfck.js
+  checksum: 9ccebfe1317e9890bd0d4743b91880c6c484d01ba16ecaa088031c3e5956591be26174b5780fba2e8328d14c8aefe097d1956ab3697157d15a4fd8eea8ac2843
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^2.0.1, tslib@npm:^2.1.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
@@ -8811,6 +8834,22 @@ __metadata:
     "@types/istanbul-lib-coverage": "npm:^2.0.1"
     convert-source-map: "npm:^2.0.0"
   checksum: ded42cd535d92b7fd09a71c4c67fb067487ef5551cc227bfbf2a1f159a842e4e4acddaef20b955789b8d3b455b9779d036853f4a27ce15007f6364a4d30317ae
+  languageName: node
+  linkType: hard
+
+"vite-tsconfig-paths@npm:^5.1.4":
+  version: 5.1.4
+  resolution: "vite-tsconfig-paths@npm:5.1.4"
+  dependencies:
+    debug: ^4.1.1
+    globrex: ^0.1.2
+    tsconfck: ^3.0.3
+  peerDependencies:
+    vite: "*"
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 9d868fcad7ac59049c08ce60f65a0e1b1caebb3d849c60ebe6ed47645255007fd8275c22a42155666fd76ee947bc36481d83c0527b2d9fa45ccafac4dbf99722
   languageName: node
   linkType: hard
 
