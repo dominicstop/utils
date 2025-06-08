@@ -116,50 +116,111 @@ export class PhysicsEngine<
 
     for (let i = 0; i < this.collisionIterations; i++) {
       this.resolveCollisions();
-    }
+    };
   }
 
   resolveCollisions(): void {
+    // loop through all possible pairs of particles
+    // e.g. `[01, 02, 03, ..., 41, 42...]`
     for (let i = 0; i < this.particles.length; i++) {
-      const p1 = this.particles[i];
-      if (p1.isStatic) continue;
+      const particleA = this.particles[i];
+      if (particleA.isStatic) continue;
 
       for (let j = i + 1; j < this.particles.length; j++) {
-        const p2 = this.particles[j];
-        if (p2.isStatic) continue;
+        const particleB = this.particles[j];
+        if (particleB.isStatic) continue;
 
-        if (!p1.isCollidingWithOther(p2)) continue;
+        // check if the two particles are colliding,
+        // only continue if they have collision
+        const hasCollision = particleA.isCollidingWithOther(particleB);
+        if (!hasCollision) continue;
 
-        const overlap = p1.computeOverlapVectorWith(p2);
-        if (overlap.isZero) continue;
+        // calculate the amount of overlap
+        const overlapVector = particleA.computeOverlapVectorWith(particleB);
+        if (overlapVector.isZero) continue;
 
-        const totalInverseMass = p1.inverseMass + p2.inverseMass;
+        // calculate the total inverse mass (used for distributing correction)
+        // skip if total is 0 (i.e. to avoid division by zero)
+        const totalInverseMass = particleA.inverseMass + particleB.inverseMass;
         if (totalInverseMass === 0) continue;
 
-        const correction = overlap.dividedByScalar(totalInverseMass);
-        if (!p1.isStatic) {
-          p1.setPosition(p1.position.addedWithOther(correction.multipliedByScalar(p1.inverseMass)));
-        }
-        if (!p2.isStatic) {
-          p2.setPosition(p2.position.subtractedWithOther(correction.multipliedByScalar(p2.inverseMass)));
-        }
+        // compute adj amount
+        // i.e. how much each particle should move to resolve the overlap
+        const correctionVector = overlapVector.dividedByScalar(totalInverseMass);
 
-        const relativeVelocity = p1.velocity.subtractedWithOther(p2.velocity);
-        const normal = overlap.normalized;
-        const velocityAlongNormal = relativeVelocity.dotProductWithOtherVector(normal);
+        // add position correction to `particleA` (if needed)
+        particleA.setPosition((() => {
+          if(particleA.isStatic){
+            return particleA.position;
+          };
 
-        if (velocityAlongNormal > 0) continue;
+          // * remember: `correctionVector` is the total overlap that needs to be
+          //   resolved/min.
+          //
+          // * each particle should move proportionally to its inverse mass (in other words:
+          //   lighter particles move more).
+          //
+          // * so scale the correction vector by `particleA.inverseMass`
+          //   to get particleA's share of the movement.
+          //
+          const positionAdjScaled = correctionVector.multipliedByScalar(particleA.inverseMass);
+          return particleA.position.addedWithOther(positionAdjScaled);
+        })());
 
-        const restitution = this.restitutionCoefficient;
-        const impulseMagnitude = -(1 + restitution) * velocityAlongNormal / totalInverseMass;
-        const impulse = normal.multipliedByScalar(impulseMagnitude);
+        // add position correction for `particleB`
+        particleB.setPosition((() => {
+          if(particleB.isStatic){
+            return particleB.position;
+          };
 
-        if (!p1.isStatic) {
-          p1.setVelocity(p1.velocity.addedWithOther(impulse.multipliedByScalar(p1.inverseMass)));
-        }
-        if (!p2.isStatic) {
-          p2.setVelocity(p2.velocity.subtractedWithOther(impulse.multipliedByScalar(p2.inverseMass)));
-        }
+          const positionAdjustmentB = correctionVector.multipliedByScalar(particleB.inverseMass);
+          return particleB.position.subtractedWithOther(positionAdjustmentB);
+        })());
+
+        // get delta of particle velocity
+        // calculate relative velocity between the two particles
+        const relativeVelocity = particleA.velocity.subtractedWithOther(particleB.velocity);
+
+        // normalize to get the direction of the collision
+        const collisionDirection = overlapVector.normalized;
+
+        // scale/re-projecr relative velocity towards collision
+        // direction (collision normal)
+        const velocityAlongCollisionDirection =
+          relativeVelocity.dotProductWithOtherVector(collisionDirection);
+
+        // skip if particles are moving apart
+        if (velocityAlongCollisionDirection > 0) continue;
+
+        // compute velocity
+        const impulse: Vector2D = (() => {
+          // calculate impulse scalar using restitution (bounciness/elasticity)
+          const restitution = this.restitutionCoefficient;
+          const impulseAmount = -(1 + restitution) * velocityAlongCollisionDirection / totalInverseMass;
+
+          // calculate the impulse vector (direction + amount)
+          return collisionDirection.multipliedByScalar(impulseAmount);
+        })();
+
+        // apply impulse to `particleA`'s velocity
+        particleA.setVelocity((() => {
+          if(particleA.isStatic){
+            return particleA.velocity;
+          };
+
+          const velocityScaled = impulse.multipliedByScalar(particleA.inverseMass);
+          return particleA.velocity.addedWithOther(velocityScaled);
+        })());
+
+        // apply impulse to `particleB`'s velocity
+        particleB.setVelocity((() => {
+          if(particleB.isStatic){
+            return particleB.velocity;
+          };
+
+          const velocityScaled = impulse.multipliedByScalar(particleB.inverseMass);
+          return particleB.velocity.subtractedWithOther(velocityScaled);
+        })());
       }
     }
   }
