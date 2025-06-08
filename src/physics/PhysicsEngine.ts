@@ -297,4 +297,8 @@ export class PhysicsEngine<
   setCollisionIterations(iterations: number): void {
     this.collisionIterations = iterations;
   }
+
+  checkIfAllParticlesAtRest(): boolean {
+    return this.particles.every(p => p.checkIsAtRest());
+  };
 }
