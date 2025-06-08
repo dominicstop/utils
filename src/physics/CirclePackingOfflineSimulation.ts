@@ -19,7 +19,7 @@ export class CirclePackingOfflineSimulation
   readonly fixedDeltaTimeSeconds: number;
 
   minIterations: number = 50;
-  maxIterations: number = 200;
+  maxIterations: number = 250;
 
   onPreStep: ((deltaTime: number) => void) | null = null;
   onPostStep: ((deltaTime: number) => void) | null = null;
@@ -109,14 +109,15 @@ export class CirclePackingOfflineSimulation
     this.engine.addForce(force);
   };
 
-  isStable(): boolean {
+  isKineticEnergyNegligible(): boolean {
     const energyThreshold = 0.01;
-    const isKineticEnergyNegligible = this.engine.getTotalKineticEnergy() < energyThreshold;
+    return this.engine.getTotalKineticEnergy() < energyThreshold;
+  };
 
-    if(isKineticEnergyNegligible){
-      return true;
-    };
-
-    return this.engine.particles.every(p => p.checkIsAtRest())
+  isStable(): boolean {
+    return (
+         this.isKineticEnergyNegligible()
+      || this.engine.checkIfAllParticlesAtRest()
+    );
   };
 };
