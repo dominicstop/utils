@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, LayoutRectangle, Text, Image } from 'react-native';
 
-import Stepper from '../../components/Stepper';
+import { DebugStepper } from '../../components/DebugStepper';
 import { WhatsNewSection } from './WhatsNewSection';
 import { MOCK_DEBUG_CONFIG } from './mock_data/WhatsNewMockData';
 
@@ -14,7 +14,7 @@ export const BubblesPrototypeScreen = () => {
       <WhatsNewSection
         debugMaxBubbleCount={bubbleCount}
       />
-      <Stepper
+      <DebugStepper
         initialValue={7}
         min={1}
         max={7}
