@@ -209,7 +209,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				B23034D4F87C44A7E3945A58 /* [CP] Embed Pods Frameworks */,
 				1F3754EA97D3B26FCE4E992B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -232,7 +231,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				599E75FCAE6F0DB4DE7EDC4C /* [CP] Embed Pods Frameworks */,
 				533DEB1F55BFCFB8627D3ED9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -473,24 +471,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-exampleReactNative/Pods-exampleReactNative-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		599E75FCAE6F0DB4DE7EDC4C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-exampleReactNative/Pods-exampleReactNative-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-exampleReactNative/Pods-exampleReactNative-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6C5E8435CF085D7B7132F6C0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -511,24 +491,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B23034D4F87C44A7E3945A58 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-exampleReactNative-exampleReactNativeTests/Pods-exampleReactNative-exampleReactNativeTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-exampleReactNative-exampleReactNativeTests/Pods-exampleReactNative-exampleReactNativeTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C045070E50FF561F81452657 /* [CP] Check Pods Manifest.lock */ = {
