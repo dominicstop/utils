@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { WhatsNewSection } from './WhatsNewSection';
 
-export const BubblesPrototypeScreen2 = () => {
+export const BubblePrototype2Screen = () => {
     const [bubbleCount, setBubbleCount] = React.useState(7);
 
     return (

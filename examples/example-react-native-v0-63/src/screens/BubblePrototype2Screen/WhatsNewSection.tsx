@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 
-import SectionHeader from '@components/_v2/sectionHeader';
-import { Dashboard } from '@modules/home/interfaces/iDashboard';
-import { Deeplink } from '@modules/common/stores/deeplinkStore';
+// import SectionHeader from '@components/_v2/sectionHeader';
+// import { Dashboard } from '@modules/home/interfaces/iDashboard';
+// import { Deeplink } from '@modules/common/stores/deeplinkStore';
+import { SectionHeader } from '../../dummy/SectionHeader';
+
 
 import { useWhatsNewData } from './UseWhatsNewData';
 import { useWhatsNewLayout } from './UseWhatsNewLayout';
@@ -17,16 +19,16 @@ import { WhatsNewEntry } from './WhatsNewService';
 
 
 export function WhatsNewSection(props: {
-    sectionThemeConfig?: Dashboard.SectionItem;
+    sectionThemeConfig?: any // Dashboard.SectionItem;
     onRequestToShowDetails: (item: WhatsNewEntry) => void;
 }){
     const [debugBubbleCount, setDebugBubbleCount] = React.useState(7);
-    
+
     const whatsNewData = useWhatsNewData({
-        debugMaxBubbleCount: 
+        debugMaxBubbleCount:
             MOCK_DEBUG_CONFIG.isDebug ? debugBubbleCount : undefined,
     });
-    
+
     const whatsNewLayout = useWhatsNewLayout(whatsNewData);
 
     const bubbles: React.JSX.Element = (() => {
@@ -43,7 +45,7 @@ export function WhatsNewSection(props: {
 
             case 'LOADING':
                 return (
-                    <RotatingView 
+                    <RotatingView
                         style={{
                             width: whatsNewLayout.state.containerRect.size.width,
                             height: whatsNewLayout.state.containerRect.size.height,
@@ -65,7 +67,7 @@ export function WhatsNewSection(props: {
                 const whatsNewData = whatsNewLayout.state.data;
 
                 return (
-                    <FadeInViewOnMount 
+                    <FadeInViewOnMount
                         style={{
                             width: whatsNewLayout.state.containerRect.size.width,
                             height: whatsNewLayout.state.containerRect.size.height,
@@ -77,7 +79,7 @@ export function WhatsNewSection(props: {
                             if(currentEntry == null){
                                 return (<React.Fragment/>);
                             };
-                            
+
                             return (
                                 <WhatsNewBubble
                                     key={`bubble-${index}`}
@@ -91,7 +93,7 @@ export function WhatsNewSection(props: {
                             );
                         })}
                         {MOCK_DEBUG_CONFIG.showBubbleGroupBoundingBox && (
-                            <View 
+                            <View
                                 style={{
                                     zIndex: -1,
                                     backgroundColor: 'rgba(255,0,0,0.5)',
@@ -132,26 +134,26 @@ export function WhatsNewSection(props: {
         case 'LOADED_NOTHING_TO_DISPLAY': return (
             <React.Fragment/>
         );
-    
+
         default: return (
             <View style={styles.rootContainer}>
                 {props.sectionThemeConfig && (
-                    <SectionHeader 
+                    <SectionHeader
                         id='whats_new'
-                        title={props.sectionThemeConfig.sectionTitle ?? "What's New"} 
+                        title={props.sectionThemeConfig.sectionTitle ?? "What's New"}
                         textStyle={{
                             color: props.sectionThemeConfig.sectionTitleColor ?? 'white',
                         }}
                     />
                 )}
-                <View 
+                <View
                     style={styles.bubblesContainer}
                     onLayout={({nativeEvent}) => {
                         const maxDimension = Math.max(
                             nativeEvent.layout.width,
                             nativeEvent.layout.height,
                         );
-    
+
                         whatsNewLayout.setContainerRect({
                             origin: {
                                 x: nativeEvent.layout.x,

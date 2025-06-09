@@ -2,7 +2,7 @@ import { Image } from "react-native";
 import { WhatsNewEntry, WhatsNewConsolidatedData } from "../WhatsNewService";
 
 export const MOCK_DEBUG_CONFIG = {
-    isDebug: __DEV__ && false,
+    isDebug: __DEV__ && true,
     shouldUseMock: __DEV__ && true,
     maxItemsToShow: 7,
     showBubbleGroupBoundingBox: __DEV__ && false,
@@ -83,8 +83,8 @@ export const WHATS_NEW_MOCK_RESPONSE: WhatsNewConsolidatedData = (() => {
     let index = 0;
     for(const key in MOCK_KEYS){
         const mockKey = key as unknown as MockKey;
-        
-        
+
+
         entries.push({
             index: index++,
             imagePreviewURL: MOCK_IMAGE_URL_MAP[mockKey],
@@ -99,7 +99,7 @@ export const WHATS_NEW_MOCK_RESPONSE: WhatsNewConsolidatedData = (() => {
 })();
 
 export function getMockImageLocalURIFromMockImageURL(mockUrl: string): string | undefined {
-    
+
     const matchingMockKey: MockKey | undefined = (() => {
         for(const mockKey of Object.keys(MOCK_KEYS)) {
             const currentMockURL = MOCK_IMAGE_URL_MAP[mockKey as MockKey];
@@ -110,7 +110,7 @@ export function getMockImageLocalURIFromMockImageURL(mockUrl: string): string | 
 
         return undefined;
     })();
-    
+
 
     if(matchingMockKey == null){
         return;

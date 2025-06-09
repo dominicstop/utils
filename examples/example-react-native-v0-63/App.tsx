@@ -24,7 +24,7 @@ import { BubbleSelectTest01Screen } from './src/screens/BubbleSelectTest01Screen
 import { TabNavigatorTest01Navigator } from './src/screens/TabNavigatorTest01Screen';
 import { TabNavigatorTest02Navigator } from './src/screens/TabNavigatorTest02Screen';
 import { BubblesPrototypeScreen } from './src/screens/BubblesPrototypeScreen';
-import { BubblesPrototypeScreen2 } from 'src/screens/BubblePrototypeScreen2';
+import { BubblePrototype2Screen } from './src/screens/BubblePrototype2Screen';
 
 class HomeScreen extends React.Component {
   render() {
@@ -94,7 +94,7 @@ const AppNavigator = createStackNavigator(
         screen: BubblesPrototypeScreen,
       },
       bubblesPrototype2: {
-        screen: BubblesPrototypeScreen2,
+        screen: BubblePrototype2Screen,
       },
       'bubbleSelect': {
         screen: BubbleSelectTest01Screen,

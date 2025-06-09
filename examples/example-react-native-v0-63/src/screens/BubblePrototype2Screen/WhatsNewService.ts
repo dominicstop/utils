@@ -1,15 +1,16 @@
 import { getMockImageLocalURIFromMockImageURL, MOCK_DEBUG_CONFIG, WHATS_NEW_MOCK_RESPONSE } from "./mock_data/WhatsNewMockData";
 
-import { Network } from "rn-lib/nativeInterface";
-import { ENDPOINTS } from "@network/endpoints";
-import { iAppUtil } from "@interfaces/iAppUtil";
-import { commonUtils } from "@utilz/commonUtils";
-import { globalDataUtils } from "@utilz/globalDataUtils";
+import { commonUtils, ENDPOINTS, globalDataUtils, iAppUtil, Network } from "../../dummy/Dummy";
+// import { Network } from "rn-lib/nativeInterface";
+// import { ENDPOINTS } from "@network/endpoints";
+// import { iAppUtil } from "@interfaces/iAppUtil";
+// import { commonUtils } from "@utilz/commonUtils";
+// import { globalDataUtils } from "@utilz/globalDataUtils";
 
 
 export type WhatsNewEntry = {
     index: number; // 0 = center
-    promoID: string; 
+    promoID: string;
     imagePreviewURL: string; // e.g. https://cdn...
     articleTitle?: string; // Optional, e.g. "New Promo!"
 };
@@ -24,7 +25,7 @@ export type WhatsNewConsolidatedData = {
 };
 
 export class WhatsNewService {
-    
+
     static minRefereshDurationMS = 60 * 60 * 1000;
 
     private _cachedBannerList?: DataWithTimestamp<BannerList>;
@@ -67,7 +68,7 @@ export class WhatsNewService {
 
             whatsNewEntries.push({
                 ...currentEntry,
-                imagePreviewURL: 
+                imagePreviewURL:
                     localPathURIForImagePreviewURL ?? 'https://en.m.wikipedia.org/wiki/File:Wikipedia-logo.png',
             });
         };
@@ -94,13 +95,13 @@ export class WhatsNewService {
     async fetchBannerList(): Promise<BannerList> {
         const requestParams = {
             ...globalDataUtils.getCommonParams()
-        };  
+        };
 
         const response: any = await Network.post({
             path: ENDPOINTS.COMMON.QUERY_BANNERS_LIST,
             params: {},
         });
-        
+
         MOCK_DEBUG_CONFIG.shouldLogNetwork &&  console.log({
             'WhatsNewService.fetchBannerList.response': response,
             'WhatsNewService.fetchBannerList.requestParams': requestParams,
@@ -116,7 +117,7 @@ export class WhatsNewService {
         if(!hasData){
             return [];
         };
-        
+
         return response.data;
     };
 
@@ -264,7 +265,7 @@ class PrivateHelpers {
     ) {
         const currentTimestamp = currentTimestampMS ?? Date.now();
         const lastFetchedTimestamp = wrappedData.timestamp ?? 0;
-    
+
         const elapsedTimeMS = currentTimestamp - lastFetchedTimestamp;
         return elapsedTimeMS > WhatsNewService.minRefereshDurationMS;
     };
