@@ -24,6 +24,7 @@ import { BubbleSelectTest01Screen } from './src/screens/BubbleSelectTest01Screen
 import { TabNavigatorTest01Navigator } from './src/screens/TabNavigatorTest01Screen';
 import { TabNavigatorTest02Navigator } from './src/screens/TabNavigatorTest02Screen';
 import { BubblesPrototypeScreen } from './src/screens/BubblesPrototypeScreen';
+import { BubblesPrototypeScreen2 } from 'src/screens/BubblePrototypeScreen2';
 
 class HomeScreen extends React.Component {
   render() {
@@ -69,6 +70,16 @@ class HomeScreen extends React.Component {
             {'bubblesPrototype'}
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => {
+            this.props.navigation.navigate('bubblesPrototype2')
+          }}
+        >
+          <Text>
+            {'bubblesPrototype2'}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -81,6 +92,9 @@ const AppNavigator = createStackNavigator(
       },
       bubblesPrototype: {
         screen: BubblesPrototypeScreen,
+      },
+      bubblesPrototype2: {
+        screen: BubblesPrototypeScreen2,
       },
       'bubbleSelect': {
         screen: BubbleSelectTest01Screen,
