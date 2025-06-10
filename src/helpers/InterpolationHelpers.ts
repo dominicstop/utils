@@ -8,7 +8,7 @@ export function lerp(
 
   let deltaRange = valueEnd - valueStart;
   let totalChange = deltaRange * percent;
-  
+
   let interpolatedValue = valueStart + totalChange;
   return interpolatedValue;
 };
@@ -31,7 +31,7 @@ export function inverseLerp(
 
   const deltaChange = interpolatedValue - valueStart;
   const deltaRange = valueEnd - valueStart;
-  
+
   const changePercent = deltaChange / deltaRange;
   return changePercent;
 };
@@ -64,13 +64,13 @@ export function rangedLerpUsingRelativePercent(
   outputValueStart: number,
   outputValueEnd: number
 ): number {
-  
+
   const rangeDelta = Math.abs(inputValueStart - inputValueEnd);
   const inputValue = rangeDelta * relativePercent;
-  
+
   const percentRaw = inputValue / rangeDelta;
   const percent = Number.isFinite(percentRaw) ? percentRaw : 0;
-  
+
   return lerp(
     /* valueStart: */ outputValueStart,
     /* valueEnd  : */ outputValueEnd,
@@ -100,12 +100,12 @@ export function rangedLerpUsingArray(
   if(shouldClampMax && inputValue < rangeInput.slice(-1)[0]){
     return rangeInput.pop();
   };
-  
+
   // A - Extrapolate Left
   if(inputValue < rangeInput[0]){
     const rangeInputStart  = rangeInput[0];
     const rangeInputEnd = rangeInput[1];
-    
+
     const rangeOutputStart = rangeOutput[0];
     const rangeOutputEnd = rangeOutput[1];
 
@@ -124,7 +124,7 @@ export function rangedLerpUsingArray(
       if(nextValue == null){
         return false;
       };
-      
+
       return inputValue >= currentValue && inputValue < nextValue;
     });
 
@@ -135,7 +135,7 @@ export function rangedLerpUsingArray(
 
     const lastIndex         = rangeInput.length - 1;
     const secondToLastIndex = rangeInput.length - 2;
-    
+
     // C - Extrapolate Right
     return [secondToLastIndex, lastIndex];
   })();
@@ -159,7 +159,7 @@ export function rangedLerpUsingArray(
   if(rangeOutputEnd == null){
     return;
   };
-  
+
   return rangedLerpUsingInputValue(
     /* inputValue      : */ inputValue,
     /* inputValueStart : */ rangeInputStart,

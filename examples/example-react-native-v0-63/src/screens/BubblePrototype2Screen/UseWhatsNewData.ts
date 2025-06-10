@@ -6,74 +6,74 @@ import { MOCK_DEBUG_CONFIG } from "./mock_data/WhatsNewMockData";
 export type WhatsNewDataState = LoadingStateWithData<WhatsNewConsolidatedData, string>
 
 export function useWhatsNewData(args?: {
-    debugMaxBubbleCount?: number;
+  debugMaxBubbleCount?: number;
 }): WhatsNewDataState {
 
-    const [loadingState, setLoadingState] = React.useState<WhatsNewDataState>({    
-        mode: 'LOADING',
-    });
-    
-    const debugMetadata = useLazyRef(() => ({
-        didLoad: false,
-    }));
+  const [loadingState, setLoadingState] = React.useState<WhatsNewDataState>({
+    mode: 'LOADING',
+  });
 
-    const [_, resetWhatNewData] = useAsyncLazyRef(
-        async () => {
-            const data = await WhatsNewServiceShared.fetchWhatsNewDataIfNeeded({
-                debugShouldEnableMockLoading: !debugMetadata.current.didLoad,
-            });
+  const debugMetadata = useLazyRef(() => ({
+    didLoad: false,
+  }));
 
-            debugMetadata.current.didLoad = true;
-            
-            const newEntries = (() => {
-                const debugMaxBubbleCount = args?.debugMaxBubbleCount;
-                if(debugMaxBubbleCount == null){
-                    return data.entries;
-                };
+  const [_, resetWhatNewData] = useAsyncLazyRef(
+    async () => {
+      const data = await WhatsNewServiceShared.fetchWhatsNewDataIfNeeded({
+        debugShouldEnableMockLoading: !debugMetadata.current.didLoad,
+      });
 
-                return data.entries.slice(0, debugMaxBubbleCount);
-            })();
+      debugMetadata.current.didLoad = true;
 
-            return {
-                ...data,
-                entries: newEntries,
-                totalItems: newEntries.length,
-            };
-        },
-        (error) => {
-            const errorMessage = (() => {
-                if (typeof error === "string") {
-                    return error;
-    
-                } else if (error instanceof Error) {
-                    return error.message;
-                };
-
-                return "An unknown error occurred";
-            })();
-    
-            setLoadingState({
-                mode: 'LOADING_ERROR',
-                errorData: errorMessage
-            });
-        },
-        (data) => {
-            setLoadingState({
-                mode: 'LOADED',
-                loadedData: data,
-            });
-        }
-    );
-
-    MOCK_DEBUG_CONFIG.isDebug && React.useEffect(() => {
-        if(!debugMetadata.current.didLoad){
-            return;
+      const newEntries = (() => {
+        const debugMaxBubbleCount = args?.debugMaxBubbleCount;
+        if(debugMaxBubbleCount == null){
+          return data.entries;
         };
 
-        setLoadingState({ mode: 'LOADING' });
-        resetWhatNewData();
+        return data.entries.slice(0, debugMaxBubbleCount);
+      })();
 
-    }, [args?.debugMaxBubbleCount]);
+      return {
+        ...data,
+        entries: newEntries,
+        totalItems: newEntries.length,
+      };
+    },
+    (error) => {
+      const errorMessage = (() => {
+        if (typeof error === "string") {
+          return error;
 
-    return loadingState;
+        } else if (error instanceof Error) {
+          return error.message;
+        };
+
+        return "An unknown error occurred";
+      })();
+
+      setLoadingState({
+        mode: 'LOADING_ERROR',
+        errorData: errorMessage
+      });
+    },
+    (data) => {
+      setLoadingState({
+        mode: 'LOADED',
+        loadedData: data,
+      });
+    }
+  );
+
+  MOCK_DEBUG_CONFIG.isDebug && React.useEffect(() => {
+    if(!debugMetadata.current.didLoad){
+      return;
+    };
+
+    setLoadingState({ mode: 'LOADING' });
+    resetWhatNewData();
+
+  }, [args?.debugMaxBubbleCount]);
+
+  return loadingState;
 };
