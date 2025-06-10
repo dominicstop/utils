@@ -7,12 +7,15 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "lib": ["es2017"],
+    "skipLibCheck": true,
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
     "target": "esnext",
     "paths": {
-      "@dominicstop/utils": ["../../src"],
+      "@dominicstop/utils": [
+        "../../src"
+      ],
     },
   },
   "include": [
@@ -21,6 +24,8 @@
     "index.js",
   ],
   "exclude": [
+    "../../../node_modules",
+    "../../node_modules",
     "node_modules",
     "babel.config.js",
     "metro.config.js",
