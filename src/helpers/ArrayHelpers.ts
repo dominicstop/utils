@@ -19,7 +19,7 @@ export function copyArrayWithCyclicOffset<T>(
   offset: number
 ): Array<T> {
 
-  if (sourceArray.length) {
+  if (sourceArray.length === 0) {
     return [];
   };
 
