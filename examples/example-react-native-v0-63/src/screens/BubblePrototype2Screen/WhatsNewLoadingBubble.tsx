@@ -1,6 +1,12 @@
-import React from 'react';
-import { StyleSheet, View, Image, Animated, Easing, ViewStyle, StyleProp } from 'react-native';
 import { BoxedHexagon } from '@dominicstop/utils';
+import React from 'react';
+import {
+  Animated,
+  Easing,
+  StyleProp,
+  StyleSheet,
+  ViewStyle
+} from 'react-native';
 import { useLazyRef } from './Temp';
 
 function PulsingContainerView(

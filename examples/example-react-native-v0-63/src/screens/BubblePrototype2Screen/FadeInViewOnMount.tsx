@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, ViewStyle, StyleProp } from 'react-native';
+import { Animated, StyleProp, ViewStyle } from 'react-native';
 import { useLazyRef } from './Temp';
 
 type FadeInViewProps = React.PropsWithChildren<{

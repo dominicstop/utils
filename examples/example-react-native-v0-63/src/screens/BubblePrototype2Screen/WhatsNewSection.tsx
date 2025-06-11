@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 // import SectionHeader from '@components/_v2/sectionHeader';
 // import { Dashboard } from '@modules/home/interfaces/iDashboard';

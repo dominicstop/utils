@@ -1,8 +1,15 @@
+import { BoxedHexagon } from '@dominicstop/utils';
 import React from 'react';
-import { StyleSheet, View, Image, Pressable, Animated, StyleProp, ViewStyle } from 'react-native';
-import { BoxedHexagon } from './BoxedHexagon';
-import { useLazyRef } from './Temp';
+import {
+  Animated,
+  Image,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  ViewStyle
+} from 'react-native';
 import { FadeInViewOnMount } from './FadeInViewOnMount';
+import { useLazyRef } from './Temp';
 import { WhatsNewEntry } from './WhatsNewService';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);

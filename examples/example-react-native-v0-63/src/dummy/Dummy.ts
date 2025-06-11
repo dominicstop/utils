@@ -80,3 +80,8 @@ export const WHATS_NEW_MOCK_RESPONSE = {
     },
   ],
 };
+
+
+export namespace Dashboard {
+  export type SectionItem = any;
+};

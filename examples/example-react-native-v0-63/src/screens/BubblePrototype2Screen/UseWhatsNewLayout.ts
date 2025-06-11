@@ -1,9 +1,6 @@
 import * as React from "react";
 
-import { BoxedHexagon } from "./BoxedHexagon";
-import { Rect, RectValue } from "./Rect";
-import { Point } from "./Point";
-import { HexagonGroup } from "./HexagonGroup";
+import { HexagonGrid, Point, Rect, RectValue, BoxedHexagon } from "@dominicstop/utils";
 import { WhatsNewDataState } from "./UseWhatsNewData";
 import { WhatsNewConsolidatedData } from "./WhatsNewService";
 
