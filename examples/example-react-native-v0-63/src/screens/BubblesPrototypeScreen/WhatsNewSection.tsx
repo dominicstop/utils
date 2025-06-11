@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { useWhatsNewData } from './UseWhatsNewData';
-import { useWhatsNewLayout } from './UseWhatsNewLayout';
-import { WhatsNewLoadingBubble } from './WhatsNewLoadingBubble';
-import { WhatsNewBubble } from './WhatsNewBubble';
+import { FadeInViewOnMount } from './FadeInViewOnMount';
 import { MOCK_DEBUG_CONFIG } from './mock_data/WhatsNewMockData';
 import { RotatingView } from './RotatingView';
-import { FadeInViewOnMount } from './FadeInViewOnMount';
+import { useWhatsNewData } from './UseWhatsNewData';
+import { useWhatsNewLayout } from './UseWhatsNewLayout';
+import { WhatsNewBubble } from './WhatsNewBubble';
+import { WhatsNewLoadingBubble } from './WhatsNewLoadingBubble';
 
 
 export function WhatsNewSection(props: {
@@ -16,7 +16,7 @@ export function WhatsNewSection(props: {
   const whatsNewData = useWhatsNewData({
     debugMaxBubbleCount: props.debugMaxBubbleCount,
   });
-  
+
   const whatsNewLayout = useWhatsNewLayout(whatsNewData);
 
   const bubbles: React.JSX.Element = (() => {
@@ -33,7 +33,7 @@ export function WhatsNewSection(props: {
 
       case 'LOADING':
         return (
-          <RotatingView 
+          <RotatingView
             style={{
               width: whatsNewLayout.state.containerRect.size.width,
               height: whatsNewLayout.state.containerRect.size.height,
@@ -55,7 +55,7 @@ export function WhatsNewSection(props: {
         const whatsNewData = whatsNewLayout.state.data;
 
         return (
-          <FadeInViewOnMount 
+          <FadeInViewOnMount
             style={{
               width: whatsNewLayout.state.containerRect.size.width,
               height: whatsNewLayout.state.containerRect.size.height,
@@ -67,7 +67,7 @@ export function WhatsNewSection(props: {
               if(currentEntry == null){
                 return (<React.Fragment/>);
               };
-              
+
               return (
                 <WhatsNewBubble
                   key={`bubble-${index}`}
@@ -93,7 +93,7 @@ export function WhatsNewSection(props: {
   })();
 
   return (
-    <View 
+    <View
       style={styles.rootContainer}
       onLayout={({nativeEvent}) => {
         const maxDimension = Math.max(
@@ -118,7 +118,8 @@ export function WhatsNewSection(props: {
         <Text>
           {`state: ${whatsNewLayout.state.mode}`}
           {'\n'}
-          {`hexagonCount: ${whatsNewLayout.state.hexagons?.length}`}
+          {`debugMaxBubbleCount: ${props.debugMaxBubbleCount}`}
+          {`hexagonCount: ${(whatsNewLayout.state as any).hexagons?.length}`}
         </Text>
       )}
     </View>

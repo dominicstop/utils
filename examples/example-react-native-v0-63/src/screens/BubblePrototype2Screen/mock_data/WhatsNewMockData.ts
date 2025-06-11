@@ -6,7 +6,8 @@ export const MOCK_DEBUG_CONFIG = {
   shouldUseMock: __DEV__ && true,
   maxItemsToShow: 7,
   showBubbleGroupBoundingBox: __DEV__ && false,
-  shouldLogNetwork: __DEV__ && true,
+  shouldLogData: __DEV__ && false,
+  shouldLogNetwork: __DEV__ && false,
 };
 
 const MOCK_KEYS = {

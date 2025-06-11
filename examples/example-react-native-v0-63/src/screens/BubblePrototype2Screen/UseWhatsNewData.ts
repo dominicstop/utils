@@ -1,6 +1,6 @@
 import * as React from "react";
-import { WhatsNewConsolidatedData, WhatsNewServiceShared } from "./WhatsNewService";
 import { LoadingStateWithData, useAsyncLazyRef, useLazyRef } from "./Temp";
+import { WhatsNewConsolidatedData, WhatsNewServiceShared } from "./WhatsNewService";
 import { MOCK_DEBUG_CONFIG } from "./mock_data/WhatsNewMockData";
 
 export type WhatsNewDataState = LoadingStateWithData<WhatsNewConsolidatedData, string>
@@ -33,6 +33,11 @@ export function useWhatsNewData(args?: {
 
         return data.entries.slice(0, debugMaxBubbleCount);
       })();
+
+      MOCK_DEBUG_CONFIG.shouldLogData && console.log({
+        'useWhatsNewData.data.entries.length': data.entries.length,
+        'useWhatsNewData.newEntries.length': newEntries.length,
+      });
 
       return {
         ...data,

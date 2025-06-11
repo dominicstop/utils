@@ -1,8 +1,9 @@
 import * as React from "react";
 
-import { HexagonGrid, Point, Rect, RectValue, BoxedHexagon } from "@dominicstop/utils";
+import { BoxedHexagon, HexagonGrid, Point, Rect, RectValue } from "@dominicstop/utils";
 import { WhatsNewDataState } from "./UseWhatsNewData";
 import { WhatsNewConsolidatedData } from "./WhatsNewService";
+import { MOCK_DEBUG_CONFIG } from "./mock_data/WhatsNewMockData";
 
 
 type LayoutStateInternal = {
@@ -59,12 +60,20 @@ function computeHexagons(args: {
 
   containerRect.origin = new Point({ x: 0, y: 0 });
 
-  return HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement({
+  const results = HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement({
     hexagonCount: args.hexagonCount,
     centerPoint: containerRect.center,
     circumRadius: args.circumRadius,
     extraPositionOffset: 8,
   });
+
+  MOCK_DEBUG_CONFIG.shouldLogData && console.log({
+    "useWhatsNewLayout.computeHexagons.args": args,
+    "useWhatsNewLayout.computeHexagons.results.boundingBox.asValue": results.boundingBox.asValue,
+    "useWhatsNewLayout.computeHexagons.results.hexagons.length": results.hexagons.length,
+  });
+
+  return results;
 };
 
 export function useWhatsNewLayout(

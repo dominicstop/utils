@@ -69,6 +69,11 @@ export function WhatsNewSection(props: {
       case 'LOADED':
         const whatsNewData = whatsNewLayout.state.data;
 
+        MOCK_DEBUG_CONFIG.shouldLogData && console.log({
+          'WhatsNewSection.whatsNewData.entries.length': whatsNewData.entries.length,
+          'whatsNewLayout.state.hexagons.length': whatsNewLayout.state.hexagons.length,
+        });
+
         return (
           <FadeInViewOnMount
             style={{
@@ -176,6 +181,8 @@ export function WhatsNewSection(props: {
               {`hexagonCount: ${
                 (whatsNewLayout.state as Record<string, any>).hexagons?.length
               }`}
+              {'\n'}
+              {`debugBubbleCount: ${debugBubbleCount}`}
             </Text>
           )}
           {MOCK_DEBUG_CONFIG.isDebug && (

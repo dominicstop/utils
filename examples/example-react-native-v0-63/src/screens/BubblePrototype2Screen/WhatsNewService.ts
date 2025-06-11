@@ -73,6 +73,11 @@ export class WhatsNewService {
       });
     };
 
+    MOCK_DEBUG_CONFIG.shouldLogNetwork && console.log({
+      "WhatsNewService.getWhatsNewMock.whatsNewEntries": whatsNewEntries,
+      "WhatsNewService.getWhatsNewMock.whatsNewEntries.length": whatsNewEntries.length,
+    });
+
     return {
       ...rawMockData,
       entries: whatsNewEntries.reverse(),
@@ -229,7 +234,9 @@ export class WhatsNewService {
   }): Promise<WhatsNewConsolidatedData> {
 
     if(MOCK_DEBUG_CONFIG.shouldUseMock) {
-      const debugShouldEnableMockLoading = args?.debugShouldEnableMockLoading ?? true;
+      const debugShouldEnableMockLoading =
+        args?.debugShouldEnableMockLoading ?? true;
+
       if(debugShouldEnableMockLoading){
         await new Promise<void>(resolve => {
           setTimeout(() => {
@@ -238,7 +245,13 @@ export class WhatsNewService {
         });
       };
 
-      return this.getWhatsNewMock();
+      const mockData = this.getWhatsNewMock();
+
+      MOCK_DEBUG_CONFIG.shouldLogNetwork && console.log({
+        "WhatsNewService.fetchWhatsNewDataIfNeeded.mockData": mockData,
+      });
+
+      return mockData;
     };
 
     const whatsNewList = await this.fetchtWhatsNewListIfNeeded();

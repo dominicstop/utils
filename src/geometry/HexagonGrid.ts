@@ -4,6 +4,8 @@ import { Point } from "./Point";
 import { Rect } from "./Rect";
 
 
+const DEBUG_SHOULD_LOG = false;
+
 export type HexagonGridConfig = {
   centerHexagon: BoxedHexagon;
   hexagonType: HexagonType;
@@ -110,6 +112,14 @@ export class HexagonGrid {
     );
 
     const boundingBox = Point.getBoundingBoxForPoints(allPoints);
+
+    DEBUG_SHOULD_LOG && console.log({
+      'HexagonGrid.computeHexagonsForFlowerArrangment.centerHexagonEdgesRaw.length': centerHexagonEdgesRaw.length,
+      'HexagonGrid.computeHexagonsForFlowerArrangment.centerHexagonEdges.length': centerHexagonEdges.length,
+      'HexagonGrid.computeHexagonsForFlowerArrangment.allPoints.length': allPoints.length,
+      'HexagonGrid.computeHexagonsForFlowerArrangment.outerHexagonRing.length': outerHexagonRing.length,
+      'HexagonGrid.computeHexagonsForFlowerArrangment.hexagons.length': hexagons.length,
+    });
 
     return {
       centerHexagon,
@@ -250,6 +260,13 @@ export class HexagonGrid {
           centerPoint: args.centerPoint,
         });
       };
+
+      DEBUG_SHOULD_LOG && console.log({
+        'HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement.hexagonsToRemoveCount': hexagonsToRemoveCount,
+        'HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement.shouldReCenter': shouldReCenter,
+        'HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement.hexagonGroup.outerHexagonRing.length': hexagonGroup.outerHexagonRing.length,
+        'HexagonGrid.computeHexagonsForTriangleAndFlowerArrangement.hexagons.length': hexagons.length,
+      });
 
       return {
         hexagons,
