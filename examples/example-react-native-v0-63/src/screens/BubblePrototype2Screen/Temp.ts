@@ -123,3 +123,52 @@ type AsyncInvocationState<U> = {
   error: string
 };
 
+export function useDeferredAsyncExecution<T, U>(
+  closureProvider: () => (args: T) => Promise<U>,
+  onInvocationStart?: (args: T) => void,
+  onInvokeCompletion?: (result: U) => void
+): {
+  invoke: (args: T) => void;
+  reset: () => void;
+  result: U | undefined;
+  resultWithState: AsyncInvocationState<U>;
+} {
+  const [state, setState] = React.useState<AsyncInvocationState<U>>({
+    mode: 'PENDING_INVOCATION',
+  });
+
+  const invoke = React.useCallback((args: T) => {
+    if (state.mode === 'INVOCATING' || state.mode === 'INVOCATED') return;
+
+    setState({ mode: 'INVOCATING' });
+    onInvocationStart?.(args);
+
+    closureProvider()(args)
+      .then((result) => {
+        setState({ mode: 'INVOCATED', result });
+        onInvokeCompletion?.(result);
+      })
+      .catch((error) => {
+        setState({
+          mode: 'INVOCATION_ERROR',
+          error: error instanceof Error ? error.message : String(error),
+        });
+      });
+  }, [
+    state.mode,
+    closureProvider,
+    onInvocationStart,
+    onInvokeCompletion
+  ]);
+
+  const reset = React.useCallback(() => {
+    setState({ mode: 'PENDING_INVOCATION' });
+  }, []);
+
+  return {
+    invoke,
+    reset,
+    result: state.mode === 'INVOCATED' ? state.result : undefined,
+    resultWithState: state,
+  };
+}
