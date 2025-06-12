@@ -185,36 +185,48 @@ describe('Rect', () => {
     });
   });
 
-  describe('applyScaleToNewSize', () => {
-    it('should apply scale and keep center fixed', () => {
+  describe('applyScaleByFactor', () => {
+    it('should scale relative to origin', () => {
       const rect = new Rect({
         mode: 'originAndSize',
         origin: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
       });
 
-      rect.applyScaleToNewSize({ width: 200, height: 100 });
+      rect.applyUniformScaleByFactor({
+        anchorReference: {
+          mode: 'relativeToOrigin',
+        },
+        percentAmount: 2
+      });
 
       expect(rect.width).toBeCloseTo(200);
       expect(rect.height).toBeCloseTo(100);
-      expect(rect.center).toEqual(new Point({ x: 50, y: 25 }));
+      expect(rect.origin.x).toBeCloseTo(0);
+      expect(rect.origin.y).toBeCloseTo(0);
     });
-  });
 
-  describe('applyScaleByFactor', () => {
-    it('should scale width and height by factors', () => {
+    it('should scale relative to center', () => {
       const rect = new Rect({
         mode: 'originAndSize',
         origin: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
+        size: { width: 100, height: 100 },
       });
 
-      rect.applyUniformScaleByFactor(2, 3);
+      const oldCenter = rect.center.clone();
 
-      expect(rect.width).toBeCloseTo(200);
-      expect(rect.height).toBeCloseTo(150);
+      rect.applyUniformScaleByFactor({
+        anchorReference: {
+          mode: 'relativeToCenter',
+        },
+        percentAmount: 3
+      });
 
-      expect(rect.center).toEqual(new Point({ x: 50, y: 25 }));
+      expect(rect.width).toBeCloseTo(300);
+      expect(rect.height).toBeCloseTo(300);
+
+      expect(rect.center.x).toBeCloseTo(oldCenter.x);
+      expect(rect.center.y).toBeCloseTo(oldCenter.y);
     });
   });
 });
