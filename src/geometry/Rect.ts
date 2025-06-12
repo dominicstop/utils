@@ -311,7 +311,7 @@ export class Rect implements BoxedPolygon<
   setCornerPoint(
     cornerKey: RectCornerKey,
     newValue: Point
-  ): Point {
+  ): void {
     switch (cornerKey) {
       case 'topLeftPoint':
         this.minX = newValue.x;
