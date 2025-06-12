@@ -64,6 +64,7 @@ export function WhatsNewBubbleGroup(props: {
             index={index}
             totalCircles={props.hexagons.length}
             circle={hexagon.inCircle}
+            isSelected={isSelected}
             circleTransformed={
               didSelectItem
                 ? transfomedCircle

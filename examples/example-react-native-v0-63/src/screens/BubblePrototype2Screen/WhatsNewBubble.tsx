@@ -4,82 +4,16 @@ import {
   Animated,
   Image,
   Pressable,
-  StyleProp,
   StyleSheet,
-  TransformsStyle,
-  ViewStyle
 } from 'react-native';
 
-import { BoxedCircle, BoxedHexagon, InterpolationHelpers } from '@dominicstop/utils';
+import { BoxedCircle, InterpolationHelpers } from '@dominicstop/utils';
 
 import { FadeInViewOnMount } from './FadeInViewOnMount';
 import { useLazyRef } from './Temp';
 import { WhatsNewEntry } from './WhatsNewService';
+import { ScalablePressable } from './ScalablePressable';
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-function ScalablePressable(
-  props: React.PropsWithChildren<{
-    style: StyleProp<ViewStyle>;
-    onPress: () => void;
-  }>,
-) {
-  const animationScaleRef = useLazyRef(() => new Animated.Value(1));
-  const animationOpacityRef = useLazyRef(() => new Animated.Value(1));
-
-  const handlePressIn = () => {
-    Animated.spring(animationScaleRef.current, {
-      toValue: 0.9,
-      useNativeDriver: true,
-      speed: 50,
-      bounciness: 0,
-    }).start();
-
-    Animated.timing(animationOpacityRef.current, {
-      toValue: 0.5,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(animationScaleRef.current, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 50,
-      bounciness: 0,
-    }).start();
-
-    Animated.timing(animationOpacityRef.current, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const inheritedStyles = StyleSheet.flatten(props.style);
-
-  return (
-    <AnimatedPressable
-      onPress={props.onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={[
-        inheritedStyles,
-        {
-          opacity: animationOpacityRef.current,
-          transform: [
-            // @ts-ignore
-            ...inheritedStyles.transform,
-
-          ],
-        },
-      ]}
-    >
-      {props.children}
-    </AnimatedPressable>
-  );
-}
 
 export function WhatsNewBubble(props: {
   index: number;
@@ -87,11 +21,14 @@ export function WhatsNewBubble(props: {
   whatsNewEntry: WhatsNewEntry;
   circle: BoxedCircle;
   circleTransformed?: BoxedCircle;
+  isSelected: boolean;
   onPress?: (args: {
     index: number;
     whatsNewEntry: WhatsNewEntry;
   }) => void;
 }) {
+
+  const isSelectionActive = props.circleTransformed != null;
 
   const animationRefTranslateX = useLazyRef(() =>
     new Animated.Value(props.circle.origin.x)
@@ -163,12 +100,28 @@ export function WhatsNewBubble(props: {
       return props.circle.origin.y + deltaCenterY;
     })();
 
-    const delay = InterpolationHelpers.rangedLerpUsingInputValue(
+    const newOpacity = (() => {
+      if(!isSelectionActive) {
+        return 1;
+      };
+
+      return props.isSelected ? 1 : 0.7;
+    })();
+
+    const transformDelay = InterpolationHelpers.rangedLerpUsingInputValue(
       /* inputValue      : */ props.index + 1,
       /* inputValueStart : */ 1,
       /* inputValueEnd   : */ props.totalCircles,
       /* outputValueStart: */ 0,
       /* outputValueEnd  : */ 75,
+    );
+
+    const fadeDelay = InterpolationHelpers.rangedLerpUsingInputValue(
+      /* inputValue      : */ props.index + 1,
+      /* inputValueStart : */ 1,
+      /* inputValueEnd   : */ props.totalCircles,
+      /* outputValueStart: */ 0,
+      /* outputValueEnd  : */ 250,
     );
 
     const delayOffset = 25;
@@ -181,7 +134,7 @@ export function WhatsNewBubble(props: {
         {
           toValue: newTranslateX,
           useNativeDriver: true,
-          delay: delay,
+          delay: transformDelay,
           bounciness: bouncinessBase,
           // @ts-ignore
           useNativeDriver: true,
@@ -193,7 +146,7 @@ export function WhatsNewBubble(props: {
         {
           toValue: newTranslateY,
           useNativeDriver: true,
-          delay: delay,
+          delay: transformDelay,
           bounciness: bouncinessBase,
           // @ts-ignore
           useNativeDriver: true,
@@ -204,12 +157,26 @@ export function WhatsNewBubble(props: {
         {
           toValue: scaleFactor,
           useNativeDriver: true,
-          delay: delay + delayOffset,
+          delay: transformDelay + delayOffset,
           bounciness: bouncinessBase + bouncinessOffset,
           // @ts-ignore
           useNativeDriver: true,
-
         }
+      ),
+      Animated.timing(
+        animationRefOpacity.current,
+        {
+          toValue: newOpacity,
+          duration: (props.isSelected
+            ? 300
+            : 0.8 * 1000
+          ),
+          delay: (props.isSelected
+            ? 0
+            : fadeDelay
+          ),
+          useNativeDriver: true,
+        },
       ),
     ]);
 
@@ -223,7 +190,6 @@ export function WhatsNewBubble(props: {
         {
           opacity: animationRefOpacity.current,
           width: props.circle.diameter,
-          borderRadius: props.circle.radius,
           transform: [
             {
               translateX: animationRefTranslateX.current
@@ -238,8 +204,13 @@ export function WhatsNewBubble(props: {
         },
       ]}
     >
-      <Pressable
-        style={{ flex: 1 }}
+      <ScalablePressable
+        style={[
+          styles.innerPressable,
+          {
+            borderRadius: props.circle.radius,
+          },
+        ]}
         onPress={() => {
           props.onPress?.({
             index: props.index,
@@ -259,18 +230,21 @@ export function WhatsNewBubble(props: {
             source={{ uri: props.whatsNewEntry.imagePreviewURL }}
           />
         </FadeInViewOnMount>
-      </Pressable>
+      </ScalablePressable>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   rootContainer: {
-    overflow: 'hidden',
     position: 'absolute',
-    backgroundColor: 'rgba(255,255,255,0.25)',
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  innerPressable: {
+    flex: 1,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255,255,255,0.25)',
   },
 });
