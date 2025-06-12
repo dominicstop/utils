@@ -2,6 +2,7 @@ import { Angle } from "./Angle";
 import { BoxedShape } from "./interfaces/BoxedShape";
 import { Point } from "./Point";
 import { Rect } from "./Rect";
+import { UniformScaleConfig } from "./Scalelable";
 
 
 export type BoxedCircleValue = {
@@ -45,7 +46,7 @@ export class BoxedCircle implements BoxedShape<
         });
         break;
     };
-  }
+  };
 
   get asValue(): BoxedCircleValue {
     return {
@@ -127,6 +128,19 @@ export class BoxedCircle implements BoxedShape<
 
   isCollidingWithOther(other: this): boolean {
     return BoxedCircle.checkCollisionBetweenTwoCircles(this, other, this.epsilon);
+  };
+
+  applyUniformScaleByFactor(args: UniformScaleConfig): void {
+    const newBoundingBox = this.boundingBox.scaledUniformallyByFactor(args);
+
+    this.radius = newBoundingBox.width / 2;
+    this.origin = newBoundingBox.origin;
+  };
+
+  scaledUniformallyByFactor(args: UniformScaleConfig): this {
+    const copy = this.clone();
+    copy.applyUniformScaleByFactor(args);
+    return copy as this;
   };
 
   // MARK: - Init Alias
