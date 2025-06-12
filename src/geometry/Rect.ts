@@ -389,4 +389,14 @@ export class Rect implements BoxedPolygon<
     clone.applyUniformScaleByFactor(args);
     return clone as this;
   };
+
+  // MARK: - Static Members - Alias Init
+  // -----------------------------------
+
+  static initFromValue(args: RectValue): Rect {
+    return new Rect({
+      mode: 'originAndSize',
+      ...args,
+    });
+  };
 }
