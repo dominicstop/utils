@@ -2,6 +2,7 @@ import { SomeCloneable } from "../../types/Cloneable";
 import { AnyValueRepresentable, ValueRepresentable } from "../../types/ValueRepresentable";
 import { Point, PointValue } from "../Point";
 import { Rect } from "../Rect";
+import { Scalable } from "../Scalelable";
 
 /**
  * A generic interface representing a shape that has a bounding box
@@ -13,7 +14,8 @@ export interface BoxedShape<
   Value extends AnyValueRepresentable
 > extends
   SomeCloneable,
-  ValueRepresentable<Value>
+  ValueRepresentable<Value>,
+  Scalable
 {
   /**
    * The origin point of the shape
