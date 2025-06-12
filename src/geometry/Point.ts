@@ -1,6 +1,7 @@
 import { InterpolationHelpers } from "../helpers";
 import { Cloneable } from "../types/Cloneable";
 import { ValueRepresentable } from "../types/ValueRepresentable";
+import { Angle } from "./Angle";
 import { Line } from "./Line";
 import { Rect } from "./Rect";
 import { Vector2D } from "./Vector2D";
@@ -111,6 +112,52 @@ export class Point implements
     return line.midPoint;
   };
 
+  rotateRelativeToCenterPoint(args: {
+    angle: Angle;
+    center: Point;
+  }): void {
+    const angleRad = args.angle.radians;
+
+    const translatedX = this.x - args.center.x;
+    const translatedY = this.y - args.center.y;
+
+    // 2d rotation matrix:
+    // * sin wave and cos wave can be used to modulate x and y axis
+    // * as they wobble back and forth, combined they can be used trace a circlular path
+    // * these two equations trace a circular path as the angle increases
+    //
+    // cos and sin on the unit:
+    // * the unit circle is a circle with radius 1, centered at the
+    //   origin (x: 0, y: 0).
+    //
+    // * for any angle theta (in radians), a point on the unit circle is:
+    //   `(x: cos(theta), y: sin(theta))`.
+    //
+    // *  innother words, if you plot `(cos(angle), sin(angle))`,
+    //    you get points around a circle.
+    //
+    // * the resulting point is a direction vector (normalized vector), i.e.
+    //   a unit-length arrow pointing in the direction of angle.
+    //
+    // * note: for this function, we define a specific center; as such
+    //   the point is first translated to be relative to the center.
+    //
+    const rotatedX = translatedX * Math.cos(angleRad) - translatedY * Math.sin(angleRad);
+    const rotatedY = translatedX * Math.sin(angleRad) + translatedY * Math.cos(angleRad);
+
+    this.x = rotatedX + args.center.x;
+    this.y = rotatedY + args.center.y;
+  };
+
+  rotatedRelativeToCenterPoint(args: {
+    angle: Angle;
+    center: Point;
+  }): Point {
+    const copy = this.clone();
+    copy.rotateRelativeToCenterPoint(args);
+    return copy;
+  };
+
   // MARK: - Static Alias
   // --------------------
 
@@ -207,5 +254,21 @@ export class Point implements
   static getDistanceBetweenTwoPoints(pointA: Point, pointB: Point): number {
     const line = pointA.createLine(pointB);
     return line.distance;
+  };
+
+  static rotatePointsRelativeToCenter(args: {
+    points: Array<Point>;
+    rotationAmount: Angle;
+    center: Point;
+  }): Array<Point> {
+
+    if (args.points.length === 0) return [];
+
+    return args.points.map(point =>
+      point.rotatedRelativeToCenterPoint({
+        angle: args.rotationAmount,
+        center: args.center
+      })
+    );
   };
 };
