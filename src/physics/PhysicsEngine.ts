@@ -1,5 +1,6 @@
 import { Rect, Vector2D } from "../geometry";
 import { AnyParticle } from "./AnyParticle";
+import { DampingForce } from "./DampingForce";
 import { isSomeParticleForce, SomeParticleForce } from "./SomeParticleForce";
 import { ParticleMetadataMap, SomePhysicsEngine } from "./SomePhysicsEngine";
 import { isSomeSystemForce, SomeSystemForce } from "./SomeSystemForce";
@@ -24,7 +25,10 @@ export class PhysicsEngine<
   dampingFactor: number = 0.98;
 
   constructor() {
-    // no-eop
+    if(this.dampingFactor < 1) {
+      const dampingForce = new DampingForce(this.dampingFactor);
+      this.addForce(dampingForce);
+    };
   }
 
   addParticle(particle: SomeParticle): void {
@@ -109,9 +113,6 @@ export class PhysicsEngine<
       if (this.worldBounds) {
         this.handleBoundaryConditions(particle);
       };
-
-      const velocityDampended = particle.velocity.multipliedByScalar(this.dampingFactor);
-      particle.setVelocity(velocityDampended);
     };
 
     for (let i = 0; i < this.collisionIterations; i++) {
@@ -124,11 +125,11 @@ export class PhysicsEngine<
     // e.g. `[01, 02, 03, ..., 41, 42...]`
     for (let i = 0; i < this.particles.length; i++) {
       const particleA = this.particles[i];
-      if (particleA.isStatic) continue;
 
       for (let j = i + 1; j < this.particles.length; j++) {
         const particleB = this.particles[j];
-        if (particleB.isStatic) continue;
+
+        if (particleA.isStatic && particleB.isStatic) continue;
 
         // check if the two particles are colliding,
         // only continue if they have collision
