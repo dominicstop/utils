@@ -13,9 +13,13 @@ import { MOCK_DEBUG_CONFIG } from './mock_data/WhatsNewMockData';
 import { RotatingView } from './RotatingView';
 import { useWhatsNewData } from './UseWhatsNewData';
 import { useWhatsNewLayout } from './UseWhatsNewLayout';
-import { WhatsNewBubble } from './WhatsNewBubble';
 import { WhatsNewLoadingBubble } from './WhatsNewLoadingBubble';
 import { WhatsNewEntry } from './WhatsNewService';
+import { WhatsNewBubbleGroup } from './WhatsNewBubbleGroup';
+import { useLazyRef } from './Temp';
+import { BoxedCircle, CirclePackingOfflineSimulation, CircleParticle, Particle, Point, Rect, Vector2D } from '@dominicstop/utils';
+import { Circle } from 'react-native-svg';
+
 
 export function WhatsNewSection(props: {
   sectionThemeConfig?: Dashboard.SectionItem;
@@ -54,7 +58,7 @@ export function WhatsNewSection(props: {
               height: whatsNewLayout.state.containerRect.size.height,
             }}
             rotateDuration={1000 * 100}
-            scaleDuration={1000 * 10}
+            scaleDuration={1000 * 8}
           >
             {whatsNewLayout.state.hexagons.map((hexagon, index) => (
               <WhatsNewLoadingBubble
@@ -74,6 +78,7 @@ export function WhatsNewSection(props: {
           'whatsNewLayout.state.hexagons.length': whatsNewLayout.state.hexagons.length,
         });
 
+
         return (
           <FadeInViewOnMount
             style={{
@@ -82,24 +87,11 @@ export function WhatsNewSection(props: {
             }}
             duration={1000}
           >
-            {whatsNewLayout.state.hexagons.map((hexagon, index) => {
-              const currentEntry = whatsNewData.entries[index]!;
-              if (currentEntry == null) {
-                return <React.Fragment />;
-              }
-
-              return (
-                <WhatsNewBubble
-                  key={`bubble-${index}`}
-                  index={index}
-                  hexagon={hexagon}
-                  whatsNewEntry={currentEntry}
-                  onPress={() => {
-                    props.onRequestToShowDetails(currentEntry);
-                  }}
-                />
-              );
-            })}
+            <WhatsNewBubbleGroup
+              hexagons={whatsNewLayout.state.hexagons}
+              bubbleTransformMap={whatsNewLayout.state.bubbleTransformMap}
+              data={whatsNewData}
+            />
             {MOCK_DEBUG_CONFIG.showBubbleGroupBoundingBox && (
               <View
                 style={{
@@ -153,12 +145,14 @@ export function WhatsNewSection(props: {
             />
           )}
           <View
-            style={styles.bubblesContainer}
+            style={[
+              styles.bubblesContainer,
+              MOCK_DEBUG_CONFIG.showBubbleGroupBoundingBox && {
+                backgroundColor: 'rgba(255,0,0,0.1)',
+              },
+            ]}
             onLayout={({nativeEvent}) => {
-              const maxDimension = Math.max(
-                nativeEvent.layout.width,
-                nativeEvent.layout.height,
-              );
+              const maxDimension = nativeEvent.layout.height;
 
               whatsNewLayout.setContainerRect({
                 origin: {

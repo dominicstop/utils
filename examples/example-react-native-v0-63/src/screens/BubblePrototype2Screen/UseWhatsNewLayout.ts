@@ -1,9 +1,11 @@
 import * as React from "react";
 
-import { BoxedHexagon, HexagonGrid, Point, Rect, RectValue } from "@dominicstop/utils";
+import { BoxedCircle, BoxedHexagon, HexagonGrid, Point, Rect, RectValue } from "@dominicstop/utils";
 import { WhatsNewDataState } from "./UseWhatsNewData";
 import { WhatsNewConsolidatedData } from "./WhatsNewService";
 import { MOCK_DEBUG_CONFIG } from "./mock_data/WhatsNewMockData";
+import { useDeferredExecution } from "./Temp";
+import { useWhatsNewBubbleTransformDeferredComputation, WhatsNewBubbleTransformationMap } from "./UseBubbleTransformDeferredComputation";
 
 
 type LayoutStateInternal = {
@@ -34,6 +36,7 @@ export type WhatsNewLayoutState = {
   hexagons: Array<BoxedHexagon>;
   hexagonGroupBoundingBox: Rect;
   data: WhatsNewConsolidatedData;
+  bubbleTransformMap: WhatsNewBubbleTransformationMap;
 
 } | {
   mode: 'LOADED_NOTHING_TO_DISPLAY';
@@ -85,6 +88,9 @@ export function useWhatsNewLayout(
     setLayoutModeInternal
   ] = React.useState<LayoutStateInternal>({ mode: 'WAITING_FOR_LAYOUT' });
 
+  const bubbleTransformManager =
+    useWhatsNewBubbleTransformDeferredComputation();
+
   const computedLayout = React.useRef<{
     hexagonsFull?: Array<BoxedHexagon>;
     hexagons?: Array<BoxedHexagon>;
@@ -94,18 +100,13 @@ export function useWhatsNewLayout(
   const setContainerRect: WhatsNewLayoutResult['setContainerRect'] = (newContainerRect) => {
     // reset
     computedLayout.current.hexagons = undefined;
+    bubbleTransformManager.reset();
 
     setLayoutModeInternal({
       mode: 'DISPLAY',
       containerRect: newContainerRect,
     });
   };
-
-  React.useEffect(() => {
-    // reset
-    computedLayout.current.hexagons = undefined;
-
-  }, [whatsNewDataState]);
 
   const consolidatedState: WhatsNewLayoutState = (() => {
     if(layoutMode.mode === 'WAITING_FOR_LAYOUT') {
@@ -178,12 +179,31 @@ export function useWhatsNewLayout(
       // cache if needed
       computedLayout.current.hexagons = hexagonGroup.hexagons;
 
+      bubbleTransformManager.invokeIfNeeded({
+        bounds: layoutMode.containerRect,
+        hexagons: hexagonGroup.hexagons,
+      });
+
+      if(bubbleTransformManager.result == null) {
+        return {
+          mode: 'LOADING',
+          containerRect: layoutMode.containerRect,
+          hexagons: hexagonGroup.hexagons,
+          hexagonGroupBoundingBox: hexagonGroup.boundingBox,
+        };
+      };
+
+      MOCK_DEBUG_CONFIG.shouldLogData && console.log({
+        'bubbleTransformManager.result - keys': Object.keys(bubbleTransformManager.result),
+      });
+
       return {
         mode: 'LOADED',
         containerRect: layoutMode.containerRect,
         hexagons: hexagonGroup.hexagons,
         hexagonGroupBoundingBox: hexagonGroup.boundingBox,
         data: whatsNewDataState.loadedData,
+        bubbleTransformMap: bubbleTransformManager.result,
       };
 
       case 'LOADING_ERROR':
@@ -198,5 +218,4 @@ export function useWhatsNewLayout(
     setContainerRect,
     state: consolidatedState,
   };
-
 };
