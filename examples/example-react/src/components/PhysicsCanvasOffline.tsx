@@ -92,6 +92,7 @@ export const PhysicsCanvasOffline: React.FC = () => {
       <button onClick={() => setShowSimulated(prev => !prev)}>
         {showSimulated ? "Show Initial State" : "Show Simulated State"}
       </button>
+      <br/>
       <canvas
         ref={canvasRef}
         width={CANVAS_SIZE.width}
