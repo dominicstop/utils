@@ -209,7 +209,7 @@ describe('Rect', () => {
         size: { width: 100, height: 50 },
       });
 
-      rect.applyScaleByFactor(2, 3);
+      rect.applyUniformScaleByFactor(2, 3);
 
       expect(rect.width).toBeCloseTo(200);
       expect(rect.height).toBeCloseTo(150);

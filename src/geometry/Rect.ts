@@ -1,5 +1,6 @@
 import { BoxedPolygon } from "./interfaces/BoxedPolygon";
 import { Point, PointValue } from "./Point";
+import { UniformScaleConfig } from "./Scalelable";
 import { SizeValue } from "./Size";
 
 
@@ -14,6 +15,15 @@ export type RectMinMaxDimensions = {
   maxX: number;
   maxY: number;
 };
+
+export type RectCorners = {
+  topLeftPoint: Point;
+  topRightPoint: Point;
+  bottomLeftPoint: Point;
+  bottomRightPoint: Point;
+};
+
+export type RectCornerKey = keyof RectCorners;
 
 export type RectInit = (
   RectValue & {
@@ -56,7 +66,7 @@ export class Rect implements BoxedPolygon<
         break;
     };
   };
-
+;
   // MARK: Getter + Setter
   // ---------------------
 
@@ -282,30 +292,101 @@ export class Rect implements BoxedPolygon<
     this.origin.y = newY;
   };
 
-  applyScaleToNewSize(newSize: SizeValue){
-    const center = this.center;
+  getCornerPoint(cornerKey: RectCornerKey): Point {
+    switch (cornerKey) {
+      case 'topLeftPoint':
+        return this.topLeftPoint.clone();
 
-    const newX = center.x - (newSize.width / 2);
-    const newY = center.y - (newSize.height / 2);
+      case 'bottomLeftPoint':
+        return this.bottomLeftPoint.clone();
+
+      case 'bottomRightPoint':
+        return this.bottomRightPoint.clone();
+
+      case 'topRightPoint':
+        return this.topRightPoint.clone();
+    };
+  };
+
+  setCornerPoint(
+    cornerKey: RectCornerKey,
+    newValue: Point
+  ): Point {
+    switch (cornerKey) {
+      case 'topLeftPoint':
+        this.minX = newValue.x;
+        this.minY = newValue.y;
+        break;
+
+      case 'bottomLeftPoint':
+        this.minX = newValue.x;
+        this.maxY = newValue.y;
+        break;
+
+      case 'bottomRightPoint':
+        this.maxX = newValue.x;
+        this.maxY = newValue.y;
+        break;
+
+      case 'topRightPoint':
+        this.maxX = newValue.x;
+        this.maxY = newValue.y;
+        break;
+    };
+  };
+
+  applyScaleToNewSize(newSize: SizeValue){
+    let center = this.center;
+
+    let newX = center.x - (newSize.width / 2);
+    let newY = center.y - (newSize.height / 2);
 
     this.origin.x = newX;
     this.origin.y = newY;
-    this.size = newSize;
   };
 
-  applyScaleByFactor(
-    widthScaleFactor: number,
-    heightScaleFactor: number
-  ){
+  applyUniformScaleByFactor(args: UniformScaleConfig): void {
+    const scaleFactor = args.percentAmount;
 
-    const newWidth = this.width * widthScaleFactor;
-    const newHeight = this.height * heightScaleFactor;
+    let anchor: Point = (() => {
+      switch (args.anchorReference.mode) {
+        case 'relativeToOrigin':
+          return this.origin.clone();
 
-    const newSize: SizeValue = {
+        case 'relativeToCenter':
+          return this.center;
+
+        case 'relativeToRectCorner':
+          return this.getCornerPoint(args.anchorReference.cornerKey);
+      };
+    })();
+
+    const newWidth = this.width * scaleFactor;
+    const newHeight = this.height * scaleFactor;
+
+    this.size = {
       width: newWidth,
-      height: newHeight
+      height: newHeight,
     };
 
-    this.applyScaleToNewSize(newSize);
+    switch (args.anchorReference.mode) {
+      case 'relativeToOrigin':
+        this.origin = anchor;
+        break;
+
+      case 'relativeToCenter':
+        this.setPointCenter(anchor);
+        break;
+
+      case 'relativeToRectCorner':
+        this.setCornerPoint(args.anchorReference.cornerKey, anchor);
+        break;
+    };
+  }
+
+  scaledUniformallyByFactor(args: UniformScaleConfig): this {
+    const clone = this.clone();
+    clone.applyUniformScaleByFactor(args);
+    return clone as this;
   };
-};
+}
