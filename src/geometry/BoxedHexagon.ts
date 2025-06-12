@@ -5,6 +5,7 @@ import { Point } from "./Point";
 import { Line } from "./Line";
 import { Vector2DValue } from "./Vector2D";
 import { BoxedPolygon } from "./interfaces/BoxedPolygon";
+import { UniformScaleConfig } from "./Scalelable";
 
 export type HexagonType = 'pointyTopped' | 'flatTopped';
 
@@ -63,7 +64,7 @@ export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
           });
       };
     })();
-  };
+  }
 
   // MARK: Getter + Setter Pairs
   // ---------------------------
@@ -306,6 +307,42 @@ export class BoxedHexagon implements BoxedPolygon<BoxedHexagonValue> {
     const minDist = this.inRadius + other.inRadius;
 
     return distSq < minDist * minDist;
+  }
+
+  applyUniformScaleByFactor(args: UniformScaleConfig): void {
+    const { percentAmount, anchorReference } = args;
+    const scaleFactor = percentAmount;
+
+    const originalCenter = this.center;
+    this.circumRadius *= scaleFactor;
+
+    let anchor: Point;
+    switch (anchorReference.mode) {
+      case 'relativeToOrigin':
+        anchor = this.origin.clone();
+        break;
+      case 'relativeToCenter':
+        anchor = originalCenter;
+        break;
+      case 'relativeToRectCorner':
+        anchor = this.boundingBox.getCornerPoint(anchorReference.cornerKey);
+        break;
+    }
+
+    const newCenter = this.center;
+    const deltaX = anchor.x - newCenter.x;
+    const deltaY = anchor.y - newCenter.y;
+
+    this.origin = new Point({
+      x: this.origin.x + deltaX,
+      y: this.origin.y + deltaY,
+    });
+  }
+
+  scaledUniformallyByFactor(args: UniformScaleConfig): this {
+    const clone = this.clone();
+    clone.applyUniformScaleByFactor(args);
+    return clone as this;
   }
 
   // MARK: Alias Init
