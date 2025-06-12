@@ -157,6 +157,36 @@ export class BoxedCircle implements BoxedShape<
   // MARK: - Static Methods
   // ----------------------
 
+  static recenterCirclesRelativeToPoint(args: {
+    circles: Array<BoxedCircle>;
+    centerPoint: Point;
+  }){
+
+    const allPoints = args.circles.reduce<Point[]>(
+      (acc, curr) => {
+        const boundingBox = curr.boundingBox;
+        acc.push(...boundingBox.cornerPointsAsArray);
+        return acc;
+      },
+      []
+    );
+
+    const boundingBox = Point.getBoundingBoxForPoints(allPoints);
+
+    const currentCenter = boundingBox.center;
+    const pointAdj = currentCenter.getDelta(args.centerPoint);
+
+    args.circles.forEach(circle => {
+      const adjX = circle.origin.x - pointAdj.x;
+      const adjY = circle.origin.y - pointAdj.y;
+
+      circle.origin = new Point({
+        x: adjX,
+        y: adjY,
+      });
+    });
+  };
+
   /**
    * the distance between the circle's centers minus
    * the sum of their radii:  `d < (r1 + r2)`
