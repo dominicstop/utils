@@ -63,21 +63,22 @@ export function useAsyncLazyRef<T>(
 
 
 
-type DeferredExecutionState<U> = {
-  mode: 'TO_BE_INVOKED'
+type DeferredExecutionState<T> = {
+  mode: 'TO_BE_INVOKED';
 } | {
   mode: 'INVOKED';
-  result: U
+  result: T;
 };
 
 export function useDeferredExecution<T, U>(
   closureProvider: () => (args: T) => U,
   onInvoke?: (result: U) => void
 ): {
-  invoke: (args: T) => void;
+  invokeIfNeeded: (args: T) => void;
   reset: () => void;
   result: U | undefined;
-  didInvoked: boolean;
+  resultWithState: DeferredExecutionState<U>
+  didInvoke: boolean;
 } {
   const [state, setState] = React.useState<DeferredExecutionState<U>>({
     mode: 'TO_BE_INVOKED',
@@ -101,10 +102,14 @@ export function useDeferredExecution<T, U>(
   }, []);
 
   return {
-    invoke,
+    invokeIfNeeded: invoke,
     reset,
-    result: state.mode === 'INVOKED' ? state.result : undefined,
-    didInvoked: state.mode === 'INVOKED',
+    result: (state.mode === 'INVOKED'
+      ? state.result
+      : undefined
+    ),
+    resultWithState: state,
+    didInvoke: state.mode === 'INVOKED',
   };
 };
 
