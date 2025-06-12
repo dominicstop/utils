@@ -240,6 +240,57 @@ describe("BoxedCircle", () => {
     });
   });
 
+  describe("rotateCirclesRelativeToPoint", () => {
+    test("rotates circles 90 degrees around origin", () => {
+      const circle1 = BoxedCircle.initFromValue({
+        center: new Point({ x: 10, y: 0 }),
+        radius: 5,
+      });
+
+      const circle2 = BoxedCircle.initFromValue({
+        center: new Point({ x: 0, y: 10 }),
+        radius: 5,
+      });
+
+      const centerPoint = new Point({ x: 0, y: 0 });
+      const rotationAmount = Angle.initFromDegrees(90);
+
+      const circles = [circle1, circle2];
+
+      BoxedCircle.rotateCirclesRelativeToPoint({
+        circles,
+        centerPoint,
+        rotationAmount,
+      });
+
+      expect(circles[0].center.x).toBeCloseTo(0);
+      expect(circles[0].center.y).toBeCloseTo(10);
+
+      expect(circles[1].center.x).toBeCloseTo(-10);
+      expect(circles[1].center.y).toBeCloseTo(0);
+    });
+
+    test("rotates circle 180 degrees around arbitrary point", () => {
+      const circle = BoxedCircle.initFromValue({
+        center: new Point({ x: 5, y: 5 }),
+        radius: 5,
+      });
+
+      const centerPoint = new Point({ x: 0, y: 0 });
+      const rotationAmount = Angle.initFromDegrees(180);
+
+      BoxedCircle.rotateCirclesRelativeToPoint({
+        circles: [circle],
+        centerPoint,
+        rotationAmount,
+      });
+
+      expect(circle.center.x).toBeCloseTo(-5);
+      expect(circle.center.y).toBeCloseTo(-5);
+    });
+  });
+
+
   describe("BoxedCircle implements BoxedShape", () => {
     test("BoxedCircle.center", () => {
       const circle = new BoxedCircle({

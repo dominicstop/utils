@@ -131,11 +131,47 @@ export class BoxedCircle implements BoxedShape<
   };
 
   applyUniformScaleByFactor(args: UniformScaleConfig): void {
-    const newBoundingBox = this.boundingBox.scaledUniformallyByFactor(args);
+    const scaleFactor = args.percentAmount;
 
-    this.radius = newBoundingBox.width / 2;
-    this.origin = newBoundingBox.origin;
-  };
+    const oldRadius = this.radius;
+    const newRadius = oldRadius * scaleFactor;
+
+    switch (args.anchorReference.mode) {
+      case 'relativeToOrigin':
+        this.radius = newRadius;
+        break;
+
+      case 'relativeToCenter':
+        const currentCenter = this.center;
+        this.radius = newRadius;
+        this.center = currentCenter;
+        break;
+
+      case 'relativeToRectCorner':
+        const boundingBox = this.boundingBox;
+        const fixedCorner = boundingBox.getCornerPoint(args.anchorReference.cornerKey);
+
+        const newDiameter = newRadius * 2;
+
+        const newBoundingBox = new Rect({
+          mode: 'originAndSize',
+          origin: Point.zero,
+          size: {
+            width: newDiameter,
+            height: newDiameter,
+          },
+        });
+
+        newBoundingBox.setCornerPoint(
+          args.anchorReference.cornerKey,
+          fixedCorner
+        );
+
+        this.origin = newBoundingBox.origin;
+        this.radius = newRadius;
+        break;
+    }
+  }
 
   scaledUniformallyByFactor(args: UniformScaleConfig): this {
     const copy = this.clone();
@@ -156,6 +192,28 @@ export class BoxedCircle implements BoxedShape<
 
   // MARK: - Static Methods
   // ----------------------
+
+  static rotateCirclesRelativeToPoint(args: {
+    circles: Array<BoxedCircle>;
+    centerPoint: Point;
+    rotationAmount: Angle,
+  }){
+
+    const centerPoints = args.circles.map(circle => circle.center);
+
+    const centerPointsRotated = Point.rotatePointsRelativeToCenter({
+      points: centerPoints,
+      rotationAmount: args.rotationAmount,
+      center: args.centerPoint,
+    });
+
+    for (let index = 0; index < args.circles.length; index++) {
+      const centerPointTranslated = centerPointsRotated[index];
+      const circle = args.circles[index];
+
+      circle.center = centerPointTranslated;
+    };
+  };
 
   static recenterCirclesRelativeToPoint(args: {
     circles: Array<BoxedCircle>;
