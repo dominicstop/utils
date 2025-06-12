@@ -1,4 +1,4 @@
-import { BoxedCircle, BoxedHexagon, CentralAttractionForce, CirclePackingOfflineSimulation, InterpolationHelpers, Particle, Rect, RectValue, RepulsionForce, Vector2D } from "@dominicstop/utils";
+import { Angle, BoxedCircle, BoxedHexagon, CentralAttractionForce, CirclePackingOfflineSimulation, InterpolationHelpers, Particle, Rect, RectValue, RepulsionForce, Vector2D } from "@dominicstop/utils";
 import { useDeferredExecution } from "./Temp";
 
 export type WhatsNewBubbleTransformationMap = Record<number, Array<BoxedCircle>>;
@@ -16,7 +16,6 @@ export function useWhatsNewBubbleTransformDeferredComputation(args?: {
     },
     WhatsNewBubbleTransformationMap
   >(() => (args) => {
-
 
     const boundsWithMargin: Rect = (() => {
       const rect = Rect.initFromValue(args.bounds);
@@ -109,6 +108,22 @@ export function useWhatsNewBubbleTransformDeferredComputation(args?: {
         circles: results,
         centerPoint: boundsWithMargin.center,
       });
+
+      if(totalCircles == 7){
+        BoxedCircle.rotateCirclesRelativeToPoint({
+          circles: results,
+          centerPoint: boundsWithMargin.center,
+          rotationAmount: new Angle({
+            angleUnit: 'degrees',
+            angleValue: 30,
+          }),
+        });
+
+        BoxedCircle.recenterCirclesRelativeToPoint({
+          circles: results,
+          centerPoint: boundsWithMargin.center,
+        });
+      };
 
       map[originalCircleIndex] = results;
     });
