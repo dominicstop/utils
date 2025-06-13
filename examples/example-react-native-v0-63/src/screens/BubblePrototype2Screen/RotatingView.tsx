@@ -6,6 +6,7 @@ type RotatingViewProps = React.PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
   rotateDuration?: number;
   scaleDuration?: number;
+  scaleDelta?: number;
 }>;
 
 export function RotatingView({
@@ -13,6 +14,7 @@ export function RotatingView({
   style,
   rotateDuration = 2000,
   scaleDuration = 3000,
+  scaleDelta = 0.15,
 }: RotatingViewProps) {
   const rotateAnim = useLazyRef(() => new Animated.Value(0));
   const scaleAnim = useLazyRef(() => new Animated.Value(1));
@@ -30,13 +32,13 @@ export function RotatingView({
     const scaleLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(scaleAnim.current, {
-          toValue: 1.1,
+          toValue: 1 + scaleDelta,
           duration: scaleDuration,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
         Animated.timing(scaleAnim.current, {
-          toValue: 1,
+          toValue: 1 - scaleDelta,
           duration: scaleDuration,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,

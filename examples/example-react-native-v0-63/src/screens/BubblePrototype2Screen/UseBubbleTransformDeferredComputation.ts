@@ -109,13 +109,17 @@ export function useWhatsNewBubbleTransformDeferredComputation(args?: {
         centerPoint: boundsWithMargin.center,
       });
 
-      if(totalCircles == 7){
+      const shouldAddExtraRotation =
+           totalCircles == 7
+        || totalCircles == 4;
+
+      if(shouldAddExtraRotation){
         BoxedCircle.rotateCirclesRelativeToPoint({
           circles: results,
           centerPoint: boundsWithMargin.center,
           rotationAmount: new Angle({
             angleUnit: 'degrees',
-            angleValue: 30,
+            angleValue: 45,
           }),
         });
 
